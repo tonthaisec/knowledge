@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<!-- saved from url=(0234)file:///C:/Users/baram/AppData/Roaming/Claude/local-agent-mode-sessions/b31c360b-2f9a-4a4e-8297-af93758e6076/d8f6d487-0cf2-4bda-a0fa-770a6a5ecd45/local_6528c0c4-57e4-4e57-85f6-22debe04b058/outputs/agentic-ai-crash-course-th.html#part2 -->
+<html lang="th"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agentic AI Crash Course — สรุปภาษาไทย</title>
+  <style>
+    :root {
+      --primary: #6C3CE1;
+      --primary-light: #9B72F5;
+      --primary-dark: #4A1DB5;
+      --accent: #FF6B35;
+      --accent2: #00C6A7;
+      --bg: #0D0D1A;
+      --bg2: #14142A;
+      --card: #1C1C3A;
+      --card2: #232345;
+      --text: #F0EEFF;
+      --text-muted: #9999CC;
+      --border: rgba(108, 60, 225, 0.3);
+      --glow: rgba(108, 60, 225, 0.15);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', 'Sarabun', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(13,13,26,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .nav-logo { font-size: 1rem; font-weight: 700; color: var(--primary-light); }
+    .nav-links {
+      display: flex; gap: 0.5rem; overflow-x: auto;
+      scrollbar-width: none; -ms-overflow-style: none;
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none;
+      font-size: 0.75rem; padding: 0.3rem 0.6rem;
+      border-radius: 20px; white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--glow); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 80px 1.5rem 3rem;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(108,60,225,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(108,60,225,0.2); border: 1px solid var(--border);
+      color: var(--primary-light); font-size: 0.8rem;
+      padding: 0.3rem 1rem; border-radius: 20px; margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 800; line-height: 1.15;
+      background: linear-gradient(135deg, #fff 0%, var(--primary-light) 50%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 1.2rem;
+    }
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--text-muted); max-width: 600px; margin-bottom: 2rem;
+    }
+    .hero-stats {
+      display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-num { font-size: 2rem; font-weight: 800; color: var(--primary-light); }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); }
+    .hero-visual {
+      font-size: 8rem; line-height: 1; margin-bottom: 1.5rem;
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)}
+    }
+    .scroll-cta {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      color: var(--text-muted); font-size: 0.9rem;
+      border: 1px solid var(--border); padding: 0.6rem 1.4rem;
+      border-radius: 30px; text-decoration: none;
+      transition: all 0.3s;
+    }
+    .scroll-cta:hover { border-color: var(--primary-light); color: var(--text); }
+
+    /* SECTION */
+    section.module {
+      padding: 5rem 1rem;
+      max-width: 900px; margin: 0 auto;
+    }
+    .module-header {
+      display: flex; align-items: flex-start; gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .module-icon {
+      font-size: 3rem; flex-shrink: 0;
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 16px; width: 72px; height: 72px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .module-meta { flex: 1; }
+    .module-tag {
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--primary-light); font-weight: 600; margin-bottom: 0.3rem;
+    }
+    .module-title {
+      font-size: clamp(1.3rem, 4vw, 1.8rem);
+      font-weight: 700; color: var(--text); line-height: 1.2;
+    }
+
+    /* CARD GRID */
+    .cards { display: grid; gap: 1rem; }
+    .cards-2 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .cards-3 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.2rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .card:hover { border-color: var(--primary-light); transform: translateY(-2px); }
+    .card-icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
+    .card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* CALLOUT */
+    .callout {
+      background: linear-gradient(135deg, rgba(108,60,225,0.15), rgba(0,198,167,0.1));
+      border: 1px solid rgba(108,60,225,0.4);
+      border-left: 4px solid var(--primary-light);
+      border-radius: 10px; padding: 1.2rem 1.4rem;
+      margin: 1.5rem 0; font-size: 0.9rem; color: var(--text);
+    }
+    .callout strong { color: var(--primary-light); }
+
+    /* FLOW */
+    .flow {
+      display: flex; flex-wrap: wrap; align-items: center;
+      gap: 0.6rem; margin: 1.5rem 0;
+    }
+    .flow-step {
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 30px; padding: 0.4rem 0.9rem;
+      font-size: 0.82rem; color: var(--text); white-space: nowrap;
+    }
+    .flow-arrow { color: var(--primary-light); font-size: 1.2rem; }
+
+    /* COMPARISON TABLE */
+    .compare-table {
+      width: 100%; border-collapse: collapse; margin: 1.5rem 0;
+      font-size: 0.85rem;
+    }
+    .compare-table th {
+      background: var(--card2); color: var(--primary-light);
+      padding: 0.7rem 1rem; text-align: left; font-weight: 700;
+      border: 1px solid var(--border);
+    }
+    .compare-table td {
+      padding: 0.65rem 1rem; border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .compare-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+    /* AUTONOMY SCALE */
+    .autonomy-scale {
+      display: flex; gap: 0.6rem; margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+    .autonomy-item {
+      flex: 1; min-width: 140px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1rem;
+      text-align: center;
+    }
+    .autonomy-bar {
+      height: 6px; border-radius: 3px; margin: 0.5rem auto 0.7rem;
+      background: linear-gradient(90deg, var(--primary-light), var(--accent));
+    }
+    .autonomy-label { font-size: 0.78rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .autonomy-desc { font-size: 0.73rem; color: var(--text-muted); }
+
+    /* MEMORY TYPES */
+    .memory-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.8rem; margin: 1.5rem 0;
+    }
+    .memory-card {
+      background: var(--card); border-radius: 12px;
+      border: 1px solid var(--border); padding: 1rem;
+      text-align: center;
+    }
+    .memory-card .mem-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .memory-card .mem-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--primary-light); }
+    .memory-card .mem-desc { font-size: 0.78rem; color: var(--text-muted); }
+    .memory-card .mem-eg { font-size: 0.72rem; color: var(--accent2); margin-top: 0.4rem; }
+
+    /* SEPARATOR */
+    .sep {
+      max-width: 900px; margin: 0 auto;
+      border: none; border-top: 1px solid var(--border);
+    }
+
+    /* LESSONS */
+    .lesson-list { list-style: none; margin: 1rem 0; }
+    .lesson-list li {
+      display: flex; gap: 0.8rem; align-items: flex-start;
+      padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.88rem; color: var(--text-muted);
+    }
+    .lesson-list li .lnum {
+      background: var(--primary-dark); color: #fff;
+      font-size: 0.72rem; font-weight: 700;
+      min-width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 0.1rem;
+    }
+
+    /* FUTURE TAGS */
+    .future-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.8rem; margin: 1.5rem 0;
+    }
+    .future-card {
+      background: linear-gradient(135deg, var(--card), var(--card2));
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 1rem;
+    }
+    .future-card .f-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+    .future-card .f-title { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.3rem; color: var(--accent2); }
+    .future-card .f-desc { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 3rem 1rem 2rem;
+      color: var(--text-muted); font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--primary-light); }
+
+    /* PROGRESS BAR */
+    .progress-bar-wrap {
+      position: fixed; top: 60px; left: 0; right: 0;
+      height: 3px; background: transparent; z-index: 99;
+    }
+    #reading-progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      width: 0%; transition: width 0.1s;
+    }
+
+    /* BACK TO TOP */
+    #back-top {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: var(--primary); color: #fff;
+      border: none; border-radius: 50%; width: 44px; height: 44px;
+      font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(108,60,225,0.4);
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    #back-top.visible { opacity: 1; pointer-events: auto; }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .module-icon { width: 56px; height: 56px; font-size: 2rem; }
+      .hero-visual { font-size: 5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">🤖 Agentic AI</span>
+  <div class="nav-links">
+    <a href="file:///C:/Users/baram/AppData/Roaming/Claude/local-agent-mode-sessions/b31c360b-2f9a-4a4e-8297-af93758e6076/d8f6d487-0cf2-4bda-a0fa-770a6a5ecd45/local_6528c0c4-57e4-4e57-85f6-22debe04b058/outputs/agentic-ai-crash-course-th.html#part1">1·Agent คืออะไร</a>
+    <a href="file:///C:/Users/baram/AppData/Roaming/Claude/local-agent-mode-sessions/b31c360b-2f9a-4a4e-8297-af93758e6076/d8f6d487-0cf2-4bda-a0fa-770a6a5ecd45/local_6528c0c4-57e4-4e57-85f6-22debe04b058/outputs/agentic-ai-crash-course-th.html#part2">2·4 ประเภท</a>
+    <a href="file:///C:/Users/baram/AppData/Roaming/Claude/local-agent-mode-sessions/b31c360b-2f9a-4a4e-8297-af93758e6076/d8f6d487-0cf2-4bda-a0fa-770a6a5ecd45/local_6528c0c4-57e4-4e57-85f6-22debe04b058/outputs/agentic-ai-crash-course-th.html#part3">3·Tools</a>
+    <a href="file:///C:/Users/baram/AppData/Roaming/Claude/local-agent-mode-sessions/b31c360b-2f9a-4a4e-8297-af93758e6076/d8f6d487-0cf2-4bda-a0fa-770a6a5ecd45/local_6528c0c4-57e4-4e57-85f6-22debe04b058/outputs/agentic-ai-crash-course-th.html#part4">4·RAG</a>
+    <a href="file:///C:/Users/baram/AppData/Roaming/Claude/local-agent-mode-sessions/b31c360b-2f9a-4a4e-8297-af93758e6076/d8f6d487-0cf2-4bda-a0fa-770a6a5ecd45/local_6528c0c4-57e4-4e57-85f6-22debe04b058/outputs/agentic-ai-crash-course-th.html#part5">5·MCP</a>
+    <a href="file:///C:/Users/baram/AppData/Roaming/Claude/local-agent-mode-sessions/b31c360b-2f9a-4a4e-8297-af93758e6076/d8f6d487-0cf2-4bda-a0fa-770a6a5ecd45/local_6528c0c4-57e4-4e57-85f6-22debe04b058/outputs/agentic-ai-crash-course-th.html#part6">6·Planning</a>
+    <a href="file:///C:/Users/baram/AppData/Roaming/Claude/local-agent-mode-sessions/b31c360b-2f9a-4a4e-8297-af93758e6076/d8f6d487-0cf2-4bda-a0fa-770a6a5ecd45/local_6528c0c4-57e4-4e57-85f6-22debe04b058/outputs/agentic-ai-crash-course-th.html#part7">7·Memory</a>
+    <a href="file:///C:/Users/baram/AppData/Roaming/Claude/local-agent-mode-sessions/b31c360b-2f9a-4a4e-8297-af93758e6076/d8f6d487-0cf2-4bda-a0fa-770a6a5ecd45/local_6528c0c4-57e4-4e57-85f6-22debe04b058/outputs/agentic-ai-crash-course-th.html#part8">8·Multi-Agent</a>
+    <a href="file:///C:/Users/baram/AppData/Roaming/Claude/local-agent-mode-sessions/b31c360b-2f9a-4a4e-8297-af93758e6076/d8f6d487-0cf2-4bda-a0fa-770a6a5ecd45/local_6528c0c4-57e4-4e57-85f6-22debe04b058/outputs/agentic-ai-crash-course-th.html#part9">9·Real-World</a>
+    <a href="file:///C:/Users/baram/AppData/Roaming/Claude/local-agent-mode-sessions/b31c360b-2f9a-4a4e-8297-af93758e6076/d8f6d487-0cf2-4bda-a0fa-770a6a5ecd45/local_6528c0c4-57e4-4e57-85f6-22debe04b058/outputs/agentic-ai-crash-course-th.html#part10">10·Lessons</a>
+  </div>
+</nav>
+
+<div class="progress-bar-wrap"><div id="reading-progress" style="width: 17.4508%;"></div></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-visual">🤖</div>
+  <span class="hero-badge">📚 Agentic AI Crash Course — สรุปฉบับภาษาไทย</span>
+  <h1>AI Agents<br>ทำงานอย่างไร?</h1>
+  <p>สรุปเนื้อหา 10 บทจากคอร์สฟรี Agentic AI Crash Course โดย Aishwarya Reganti &amp; Kiriti Badam อ่านง่าย เข้าใจเร็ว ใช้งานได้จริง</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">บทเรียน</div></div>
+    <div class="stat"><div class="stat-num">Free</div><div class="stat-label">เรียนฟรี</div></div>
+    <div class="stat"><div class="stat-num">🇹🇭</div><div class="stat-label">ภาษาไทย</div></div>
+  </div>
+  <a href="file:///C:/Users/baram/AppData/Roaming/Claude/local-agent-mode-sessions/b31c360b-2f9a-4a4e-8297-af93758e6076/d8f6d487-0cf2-4bda-a0fa-770a6a5ecd45/local_6528c0c4-57e4-4e57-85f6-22debe04b058/outputs/agentic-ai-crash-course-th.html#part1" class="scroll-cta">เริ่มอ่าน ↓</a>
+</div>
+
+<!-- PART 1 -->
+<section class="module" id="part1">
+  <div class="module-header">
+    <div class="module-icon">🧠</div>
+    <div class="module-meta">
+      <div class="module-tag">บทที่ 1</div>
+      <div class="module-title">AI Agent คืออะไร กันแน่?</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>สรุปสั้น:</strong> AI Agent ไม่ใช่แค่ Chatbot ที่ตอบคำถาม — มันเป็นระบบที่ <strong>คิดเอง ตัดสินใจเอง และลงมือทำจริง</strong>
+  </div>
+
+  <div class="cards cards-2">
+    <div class="card">
+      <div class="card-icon">💬</div>
+      <h3>ChatGPT (2022) — จุดเปลี่ยน</h3>
+      <p>เปิดยุค AI สนทนาโดยไม่ต้องเขียนโค้ด ไม่ต้องเทรนโมเดลเอง ใครๆ ก็ใช้ได้</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🚀</div>
+      <h3>2024 — ผู้คนอยากได้มากกว่านั้น</h3>
+      <p>แค่ตอบคำถามไม่พอแล้ว ต้องการให้ AI จัดการ email, วิเคราะห์ข้อมูล, ทำรายงานได้เอง</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🛠️</div>
+      <h3>Agent ทำงานอย่างไร?</h3>
+      <p>ใช้ <strong>Tools</strong> (API, function call) เป็น "มือ" และ LLM เป็น "สมอง" ตัดสินใจว่าจะใช้ Tool ไหน เมื่อไหร่</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗂️</div>
+      <h3>สูตรสำเร็จ Agent</h3>
+      <p><strong>LLM + Tools + Planning + Memory</strong> = ระบบที่ทำงานจากต้นจนจบได้โดยอัตโนมัติ</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    💡 <strong>Insight สำคัญ:</strong> Agent ไม่ใช่การค้นพบ AI ใหม่ — มันคือ "วิศวกรรมห่อหุ้ม" รอบๆ โมเดล AI ที่มีอยู่แล้ว ประเด็นอยู่ที่ <strong>ออกแบบให้ดีแค่ไหน</strong>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- PART 2 -->
+<section class="module" id="part2">
+  <div class="module-header">
+    <div class="module-icon">🗂️</div>
+    <div class="module-meta">
+      <div class="module-tag">บทที่ 2</div>
+      <div class="module-title">4 ประเภทของ Agentic Systems</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>หัวใจ:</strong> เลือก Agent ให้เหมาะกับงาน ไม่ใช่เลือกตามความล้ำของเทคโนโลยี
+  </div>
+
+  <div class="autonomy-scale">
+    <div class="autonomy-item">
+      <div class="autonomy-label">⚙️ Rule-Based</div>
+      <div class="autonomy-bar" style="width:25%;"></div>
+      <div class="autonomy-desc">อัตโนมัติต่ำ — กฎตายตัว</div>
+    </div>
+    <div class="autonomy-item">
+      <div class="autonomy-label">📋 Workflow Agent</div>
+      <div class="autonomy-bar" style="width:50%;"></div>
+      <div class="autonomy-desc">ช่วยมนุษย์ตัดสินใจ</div>
+    </div>
+    <div class="autonomy-item">
+      <div class="autonomy-label">🤝 Semi-Autonomous</div>
+      <div class="autonomy-bar" style="width:75%;"></div>
+      <div class="autonomy-desc">ทำเองได้ บางจุดหยุดถาม</div>
+    </div>
+    <div class="autonomy-item">
+      <div class="autonomy-label">🚁 Autonomous</div>
+      <div class="autonomy-bar" style="width:100%;"></div>
+      <div class="autonomy-desc">อัตโนมัติเต็ม — เป้าหมายกว้างๆ</div>
+    </div>
+  </div>
+
+  <div class="cards cards-2">
+    <div class="card">
+      <div class="card-icon">⚙️</div>
+      <h3>1. Rule-Based Systems</h3>
+      <p>if-this-then-that แบบดั้งเดิม ไม่มี AI จริงๆ เร็ว ตรวจสอบง่าย แต่เปลี่ยนยาก<br><br>
+      <span style="color:var(--accent2);">ตัวอย่าง:</span> อนุมัติค่าใช้จ่ายอัตโนมัติ, เปลี่ยนชื่อไฟล์</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📋</div>
+      <h3>2. Workflow Agents</h3>
+      <p>LLM ช่วยทำงานในกระบวนการที่มีอยู่แล้ว แต่ <strong>มนุษย์ยังตัดสินใจสุดท้าย</strong><br><br>
+      <span style="color:var(--accent2);">ตัวอย่าง:</span> Draft ตอบ email, สรุปประชุม, แปลง query สำหรับ BI</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤝</div>
+      <h3>3. Semi-Autonomous Agents</h3>
+      <p>วางแผนหลายขั้นตอน ใช้ Tools และทำงานเองได้ มี checkpoint ให้มนุษย์ตรวจ<br><br>
+      <span style="color:var(--accent2);">ตัวอย่าง:</span> ติดตาม lead, จัดการเอกสาร, Research agent</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🚁</div>
+      <h3>4. Autonomous Agents</h3>
+      <p>รับเป้าหมายกว้างๆ แล้วคิดเองทำเอง ทำงานข้ามระบบโดยไม่ต้องสั่ง ความเสี่ยงสูง<br><br>
+      <span style="color:var(--accent2);">ตัวอย่าง:</span> Competitive research, Autonomous testing</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    🎯 <strong>Framework ตัดสินใจ:</strong> ถามว่า "งานมีโครงสร้างชัดแค่ไหน? ต้องการ Language ไหม? ใครตัดสินใจ?" ก่อนเลือก Agent ประเภท
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- PART 3 -->
+<section class="module" id="part3">
+  <div class="module-header">
+    <div class="module-icon">🔧</div>
+    <div class="module-meta">
+      <div class="module-tag">บทที่ 3</div>
+      <div class="module-title">Tools ใน AI คืออะไร?</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>สรุป:</strong> Tools คือ "มือ" ของ Agent — ทำให้ LLM ออกไปทำอะไรได้จริงในโลก ไม่ใช่แค่พูด
+  </div>
+
+  <div class="cards cards-2">
+    <div class="card">
+      <div class="card-icon">🔗</div>
+      <h3>Tools คืออะไร?</h3>
+      <p>ความสามารถภายนอกที่ LLM เรียกใช้ได้ — API, database queries, internal services, code functions ที่เชื่อมกับโลกจริง</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎯</div>
+      <h3>ทำไมต้องมี Tools?</h3>
+      <p>LLM โดยธรรมชาติ <strong>ไม่รู้ข้อมูล realtime</strong> และ <strong>ทำอะไรไม่ได้จริง</strong> Tools แก้ปัญหานี้</p>
+    </div>
+  </div>
+
+  <p style="margin: 1.2rem 0 0.5rem; font-weight: 700;">🔄 วงจรการทำงาน (Agent Loop)</p>
+  <div class="flow">
+    <span class="flow-step">👤 User Request</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">🧠 LLM วางแผน</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">📞 เรียก Tool</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">⚙️ Execute</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">👁️ Observe</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">🔁 วนซ้ำจนเสร็จ</span>
+  </div>
+
+  <div class="cards cards-2" style="margin-top:1rem;">
+    <div class="card">
+      <div class="card-icon">✅</div>
+      <h3>ประโยชน์ 4 อย่าง</h3>
+      <p>① Unlock Execution — ทำจริงไม่ใช่แนะนำ<br>② เพิ่ม Precision — ดึงข้อมูลจริง<br>③ Control Risk — Developer กำหนดขอบเขตได้<br>④ Composability — เชื่อม CRM, Email, Calendar</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📝</div>
+      <h3>ออกแบบ Tool ที่ดี</h3>
+      <p>ต้องมี: ชื่อชัดเจน, คำอธิบาย "ใช้เมื่อไหร่", input parameters แบบ typed, output ที่ structured ให้ LLM ต่อได้</p>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- PART 4 -->
+<section class="module" id="part4">
+  <div class="module-header">
+    <div class="module-icon">📚</div>
+    <div class="module-meta">
+      <div class="module-tag">บทที่ 4</div>
+      <div class="module-title">RAG และ Agentic RAG คืออะไร?</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>RAG</strong> = Retrieval-Augmented Generation = ให้ AI ดึงข้อมูลจริงขององค์กรก่อนตอบ แทนที่จะอ้างอิงแค่ความรู้ตอน Train
+  </div>
+
+  <table class="compare-table">
+    <thead><tr><th>🔍 แบบไหน</th><th>📋 วิธีทำงาน</th><th>✅ เหมาะกับ</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Traditional RAG</td>
+        <td>Query → ดึงข้อมูลครั้งเดียว → ตอบ</td>
+        <td>คำถามง่ายๆ เช่น Policy lookup</td>
+      </tr>
+      <tr>
+        <td>Agentic RAG</td>
+        <td>ดึงข้อมูลหลายรอบ ระหว่างทำงาน ปรับแผนได้</td>
+        <td>งานซับซ้อน multi-step</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="cards cards-2">
+    <div class="card">
+      <div class="card-icon">🏢</div>
+      <h3>ทำไม Enterprise ชอบ RAG?</h3>
+      <p>~70% ของ Enterprise GenAI use case ใช้ RAG เพราะ ข้อมูลองค์กรเปลี่ยนตลอด, Fine-tune แพง, RAG เร็วกว่า ปลอดภัยกว่า ตรวจสอบได้</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔄</div>
+      <h3>Agentic RAG ต่างกันอย่างไร?</h3>
+      <p>ไม่ใช่ดึงข้อมูลแค่ครั้งเดียว แต่ดึงซ้ำระหว่างงาน ตรวจสอบข้อเท็จจริง ลด hallucination และปรับ context ได้ realtime</p>
+    </div>
+  </div>
+
+  <div class="flow">
+    <span class="flow-step">📂 Data Ingestion</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">✂️ Chunking &amp; Index</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">🔍 Retrieve</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">💬 Context Injection</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">🤖 Generate</span>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- PART 5 -->
+<section class="module" id="part5">
+  <div class="module-header">
+    <div class="module-icon">🔌</div>
+    <div class="module-meta">
+      <div class="module-tag">บทที่ 5</div>
+      <div class="module-title">MCP คืออะไร? และทำไมต้องสนใจ?</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>MCP</strong> (Model Context Protocol) = มาตรฐานกลางสำหรับ "จัดแพ็กเกจ" ข้อมูลทุกอย่างให้ LLM — เหมือน HTTP สำหรับเว็บ, แต่ใช้กับ AI
+  </div>
+
+  <div class="cards cards-2">
+    <div class="card">
+      <div class="card-icon">📦</div>
+      <h3>MCP รวมอะไรไว้ด้วยกัน?</h3>
+      <p>Task instructions + Tools &amp; APIs + Retrieved documents + Memory + Conversation history → ส่งให้ LLM เป็นแพ็กเกจเดียว</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏗️</div>
+      <h3>ทำไม Enterprise ต้องสนใจ?</h3>
+      <p>ระบบ Agent ใหญ่ขึ้น → จัดการ Tools, Memory, RAG พร้อมกันยากมาก MCP ทำให้ modular และ composable ได้</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <h3>ทำไม Adoption เร็ว?</h3>
+      <p>ออกแบบมาสำหรับ AI โดยเฉพาะ, Anthropic ทำ docs + SDK ดีมาก, Network effect หลังปี 2025</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎯</div>
+      <h3>ใครควรใช้ MCP?</h3>
+      <p>Enterprise-grade agents, Multi-tool workflows, ระบบที่ context management เป็น bottleneck — ไม่จำเป็นสำหรับ prototype ง่ายๆ</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    💡 <strong>Key point:</strong> MCP ไม่ได้ทำให้โมเดลฉลาดขึ้น — แต่ทำให้ข้อมูลที่ส่งให้โมเดล <strong>มีโครงสร้างและสะอาดกว่า</strong>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- PART 6 -->
+<section class="module" id="part6">
+  <div class="module-header">
+    <div class="module-icon">🗺️</div>
+    <div class="module-meta">
+      <div class="module-tag">บทที่ 6</div>
+      <div class="module-title">Planning ใน Agents และ Reasoning Models</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>ปัญหา:</strong> LLM ถูก Train ให้ "ทำนาย token ถัดไป" ไม่ได้ Train ให้วางแผนหลายขั้นตอน จึงมักหลงทาง ข้ามขั้น หรือลืมเป้าหมาย
+  </div>
+
+  <table class="compare-table">
+    <thead><tr><th>โมเดล</th><th>วิธีทำงาน</th><th>ปัญหา</th></tr></thead>
+    <tbody>
+      <tr><td>LLM ทั่วไป</td><td>Input → Output ทันที</td><td>วางแผนซับซ้อนไม่เก่ง</td></tr>
+      <tr><td>LRM (Reasoning Model)</td><td>Input → วางแผน → Output</td><td>ช้า แพง บางที overthink</td></tr>
+    </tbody>
+  </table>
+
+  <div class="cards cards-2">
+    <div class="card">
+      <div class="card-icon">🧩</div>
+      <h3>Planning ครอบคลุมอะไร?</h3>
+      <p>แปล instructions → แบ่ง subtasks → ดึงข้อมูล → เลือก Tools → ลำดับขั้นตอน → จัดการ error → รู้ว่าเสร็จเมื่อไหร่</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤔</div>
+      <h3>Reasoning Models คืออะไร?</h3>
+      <p>Train ให้ "คิดก่อนตอบ" — o-series (OpenAI), DeepSeek-R1, Gemini Thinking, Claude reasoning mode</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    ⚠️ <strong>ข้อควรระวัง:</strong> Reasoning models ดีขึ้น แต่ก็ overthink งานง่ายๆ, output ยาวกว่า, latency สูงกว่า และอาจ hallucinate แผนที่ฟังดูสมเหตุสมผลแต่ผิด<br><br>
+    <strong>คำแนะนำ:</strong> เริ่มด้วย base model ก่อน เปลี่ยนเป็น reasoning model เมื่อเห็นปัญหา planning จริงๆ เท่านั้น
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- PART 7 -->
+<section class="module" id="part7">
+  <div class="module-header">
+    <div class="module-icon">🧠</div>
+    <div class="module-meta">
+      <div class="module-tag">บทที่ 7</div>
+      <div class="module-title">Memory ใน AI Agents</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>สภาพจริง:</strong> LLM โดย default ไม่มี memory — ทุก input ถือว่าเป็นอะไรใหม่ ต้องออกแบบ Memory ใส่ไปเองเสมอ
+  </div>
+
+  <table class="compare-table">
+    <thead><tr><th>ประเภท</th><th>ขอบเขต</th><th>เนื้อหา</th></tr></thead>
+    <tbody>
+      <tr><td>🔵 Short-Term Memory</td><td>เฉพาะ session นั้น</td><td>ประวัติสนทนา, Tool calls, เอกสารที่ดึงมา</td></tr>
+      <tr><td>🟣 Long-Term Memory</td><td>ข้าม session ได้</td><td>User preferences, งานที่ทำไปแล้ว, identity</td></tr>
+    </tbody>
+  </table>
+
+  <div class="memory-grid">
+    <div class="memory-card">
+      <div class="mem-icon">📖</div>
+      <div class="mem-title">Semantic Memory</div>
+      <div class="mem-desc">ข้อเท็จจริงเกี่ยวกับ user</div>
+      <div class="mem-eg">ตัวอย่าง: "ชอบรับไฟล์เป็น Excel"</div>
+    </div>
+    <div class="memory-card">
+      <div class="mem-icon">📜</div>
+      <div class="mem-title">Episodic Memory</div>
+      <div class="mem-desc">บันทึกเหตุการณ์ที่ผ่านมา</div>
+      <div class="mem-eg">ตัวอย่าง: "สรุปรายงานให้เมื่อวาน"</div>
+    </div>
+    <div class="memory-card">
+      <div class="mem-icon">⚙️</div>
+      <div class="mem-title">Procedural Memory</div>
+      <div class="mem-desc">ความชอบส่วนตัว, Style guide</div>
+      <div class="mem-eg">ตัวอย่าง: "หลีกเลี่ยง passive voice"</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    🎯 <strong>หลักการ:</strong> "Problem-first เสมอ" — Memory ที่ดีไม่ใช่เก็บให้มากที่สุด แต่เก็บ <strong>สิ่งที่ถูกต้อง ดึงได้ทันเวลา</strong>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- PART 8 -->
+<section class="module" id="part8">
+  <div class="module-header">
+    <div class="module-icon">🌐</div>
+    <div class="module-meta">
+      <div class="module-tag">บทที่ 8</div>
+      <div class="module-title">Multi-Agent Systems</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>แนวคิด:</strong> แทนที่จะมี Agent ตัวเดียวทำทุกอย่าง แบ่งเป็น Agent หลายตัวที่เชี่ยวชาญแต่ละด้าน ทำงานพร้อมกัน
+  </div>
+
+  <div class="cards cards-2">
+    <div class="card">
+      <div class="card-icon">👑</div>
+      <h3>Hierarchical (มีผู้นำ)</h3>
+      <p><strong>Orchestrator</strong> สั่งงาน Sub-agents ที่มีหน้าที่เฉพาะ เหมาะกับงานที่แบ่งงานชัดเจน ต้องการ governance เข้ม<br><br>
+      ใช้กับ: Enterprise workflows, parallel processing</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤝</div>
+      <h3>Flat (เท่าเทียมกัน)</h3>
+      <p>Agent คุยกันโดยตรง ไม่มีหัวหน้า เหมาะกับการ brainstorm หรืองานที่ไม่มีคำตอบเดียว<br><br>
+      ใช้กับ: Creative problem-solving, multi-perspective analysis</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    ⚠️ <strong>ความเสี่ยงที่มองข้าม:</strong> ยิ่ง Agent มาก → ยิ่ง non-deterministic → ความผิดพลาดทบทวีคูณ, latency สูง, cost พุ่ง, และ "Collusion" (Agent เห็นด้วยกันโดยไม่ได้คิด)<br><br>
+    <strong>คำแนะนำ:</strong> เริ่มด้วย Single Agent ที่ดีก่อนเสมอ 70%+ ของ Enterprise use case ไม่ต้องการ Multi-Agent
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- PART 9 -->
+<section class="module" id="part9">
+  <div class="module-header">
+    <div class="module-icon">🌍</div>
+    <div class="module-meta">
+      <div class="module-tag">บทที่ 9</div>
+      <div class="module-title">ระบบ Agentic AI ในโลกจริง</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>เรียนรู้จากสิ่งที่มีอยู่แล้ว:</strong> 3 ระบบจริงที่ใช้หลักการ Agentic AI ในระดับต่างกัน
+  </div>
+
+  <div class="cards cards-3">
+    <div class="card">
+      <div class="card-icon">📓</div>
+      <h3>Google NotebookLM</h3>
+      <p>Research assistant สำหรับ document Q&amp;A ดึงข้อมูลและสังเคราะห์จากหลายไฟล์ <br><br>
+      <span style="color:var(--accent2);">ระดับ Autonomy: 2-3</span><br>มนุษย์ยังชี้นำ</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔍</div>
+      <h3>Perplexity</h3>
+      <p>ค้นหาเว็บ → ตัดสินใจใช้อะไร → สังเคราะห์คำตอบพร้อม citation วน loop หลายรอบ<br><br>
+      <span style="color:var(--accent2);">ระดับ Autonomy: 3-4</span><br>อิสระมากขึ้น</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧪</div>
+      <h3>OpenAI DeepResearch</h3>
+      <p>รับเป้าหมายกว้างๆ แบ่ง subtasks เอง ทำซ้ำจนเสร็จ minimal human guidance<br><br>
+      <span style="color:var(--accent2);">ระดับ Autonomy: 4</span><br>อัตโนมัติเต็มที่</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    💡 <strong>Insight:</strong> ทั้ง 3 ระบบใช้ส่วนประกอบเดียวกัน: Planning, RAG, Memory, Tools — ต่างกันแค่ว่า <strong>มนุษย์ควบคุมมากแค่ไหน</strong>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- PART 10 -->
+<section class="module" id="part10">
+  <div class="module-header">
+    <div class="module-icon">🔮</div>
+    <div class="module-meta">
+      <div class="module-tag">บทที่ 10</div>
+      <div class="module-title">บทเรียนและอนาคตของ Agentic AI</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>บทสรุปคอร์ส:</strong> Agent = ระบบตัดสินใจ ไม่ใช่แค่ Chatbot | มีหลายระดับ | ต้องวางแผน memory, tools, RAG อย่างตั้งใจ
+  </div>
+
+  <p style="font-weight: 700; margin-bottom: 0.8rem;">⚠️ สิ่งที่ทีมมักมองข้าม</p>
+  <ul class="lesson-list">
+    <li><span class="lnum">1</span>ออกแบบ <strong>Observability ตั้งแต่วันแรก</strong> — track tool calls, latency, decision chains อย่ารอให้มีปัญหาก่อน</li>
+    <li><span class="lnum">2</span>อย่าอยู่ใน <strong>"PoC Purgatory"</strong> — ทดสอบแบบไม่เป็นระบบ ใช้ metrics จริง: task completion, hallucination rate, token efficiency</li>
+    <li><span class="lnum">3</span><strong>Start Simple</strong> — Agent ตัวเดียวที่ดีมักดีกว่า Multi-Agent ที่ซับซ้อนโดยไม่จำเป็น</li>
+  </ul>
+
+  <p style="font-weight: 700; margin: 1.5rem 0 0.8rem;">🔮 อนาคตของ Agentic AI</p>
+  <div class="future-grid">
+    <div class="future-card">
+      <div class="f-icon">📏</div>
+      <div class="f-title">Standards Over Improvisation</div>
+      <div class="f-desc">MCP และ Google A2A จะกลายเป็น standard วิธีส่งข้อมูลระหว่าง Agent กับ LLM</div>
+    </div>
+    <div class="future-card">
+      <div class="f-icon">🎛️</div>
+      <div class="f-title">Selective Reasoning</div>
+      <div class="f-desc">โมเดลจะเลือกได้ว่าเมื่อไหรควร "คิดลึก" และเมื่อไหรตอบเร็วพอ</div>
+    </div>
+    <div class="future-card">
+      <div class="f-icon">🧠</div>
+      <div class="f-title">Sophisticated Memory</div>
+      <div class="f-desc">จาก "ต่อกันด้วยกาว" สู่ memory ที่ scope ตามงาน session และ persona ได้จริง</div>
+    </div>
+    <div class="future-card">
+      <div class="f-icon">🏗️</div>
+      <div class="f-title">Mature Tooling</div>
+      <div class="f-desc">จาก custom wrappers สู่ trusted APIs มาตรฐาน พร้อม security practices ที่แข็งแรง</div>
+    </div>
+  </div>
+
+  <div class="callout" style="background: linear-gradient(135deg, rgba(255,107,53,0.15), rgba(108,60,225,0.15)); border-color: rgba(255,107,53,0.4); border-left-color: var(--accent);">
+    🏆 <strong>บทเรียนสุดท้าย (และสำคัญที่สุด):</strong><br>
+    <strong>Problem-first เสมอ</strong> อย่าเริ่มจากเทคโนโลยี เริ่มจากปัญหาที่อยากแก้ Start simple, measure rigorously, scale deliberately.
+  </div>
+</section>
+
+<!-- COURSE SUMMARY FOOTER -->
+<section style="max-width:900px; margin: 0 auto; padding: 2rem 1rem 4rem;">
+  <div style="background: linear-gradient(135deg, var(--card), var(--card2)); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; text-align:center;">
+    <div style="font-size:2.5rem; margin-bottom:1rem;">🗺️</div>
+    <h2 style="font-size:1.4rem; margin-bottom:1rem; color: var(--primary-light);">ภาพรวมทั้งคอร์สใน 1 สไลด์</h2>
+    <div style="display:flex; flex-wrap:wrap; gap:0.6rem; justify-content:center; margin-bottom:1.5rem;">
+      <span style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:0.3rem 0.8rem;font-size:0.8rem;">🧠 Agent = Brain + Hands</span>
+      <span style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:0.3rem 0.8rem;font-size:0.8rem;">🗂️ 4 ระดับ Autonomy</span>
+      <span style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:0.3rem 0.8rem;font-size:0.8rem;">🔧 Tools = มือ</span>
+      <span style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:0.3rem 0.8rem;font-size:0.8rem;">📚 RAG = ข้อมูลจริง</span>
+      <span style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:0.3rem 0.8rem;font-size:0.8rem;">🔌 MCP = Protocol มาตรฐาน</span>
+      <span style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:0.3rem 0.8rem;font-size:0.8rem;">🗺️ Planning = คิดก่อนทำ</span>
+      <span style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:0.3rem 0.8rem;font-size:0.8rem;">🧠 Memory = จำข้ามเซสชัน</span>
+      <span style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:0.3rem 0.8rem;font-size:0.8rem;">🌐 Multi-Agent = ทีมงาน</span>
+      <span style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:0.3rem 0.8rem;font-size:0.8rem;">🌍 Real-World = Perplexity, NotebookLM</span>
+      <span style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:0.3rem 0.8rem;font-size:0.8rem;">🏆 Problem-First เสมอ</span>
+    </div>
+    <a href="https://github.com/aishwaryanr/awesome-generative-ai-guide/tree/main/free_courses/agentic_ai_crash_course" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--primary);color:#fff;text-decoration:none;padding:0.7rem 1.5rem;border-radius:30px;font-weight:700;font-size:0.9rem;">
+      📖 อ่านคอร์สเต็มๆ บน GitHub
+    </a>
+  </div>
+</section>
+
+<footer>
+  สรุปเนื้อหาจาก <a href="https://github.com/aishwaryanr/awesome-generative-ai-guide" target="_blank">Awesome Generative AI Guide</a> โดย Aishwarya Reganti &amp; Kiriti Badam<br>
+  คอร์สฟรีทั้งหมด — สรุปภาษาไทยเพื่อการศึกษา • มีนาคม 2026
+</footer>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:&#39;smooth&#39;})" title="กลับด้านบน" class="visible">↑</button>
+
+<script>
+  // Reading progress bar
+  window.addEventListener('scroll', () => {
+    const total = document.body.scrollHeight - window.innerHeight;
+    const prog = (window.scrollY / total) * 100;
+    document.getElementById('reading-progress').style.width = prog + '%';
+    const btn = document.getElementById('back-top');
+    if (window.scrollY > 400) btn.classList.add('visible');
+    else btn.classList.remove('visible');
+  });
+</script>
+
+
+</body></html>
