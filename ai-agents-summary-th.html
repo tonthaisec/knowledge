@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agents สรุปฉบับสมบูรณ์ — สำหรับ AI Engineer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --bg: #0a0e17;
+            --bg-card: #111827;
+            --bg-card-hover: #1a2332;
+            --bg-code: #1e293b;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-pink: #ec4899;
+            --accent-red: #ef4444;
+            --border: #1e293b;
+            --border-light: #334155;
+            --gradient-1: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            --gradient-2: linear-gradient(135deg, #06b6d4, #10b981);
+            --gradient-3: linear-gradient(135deg, #f59e0b, #ef4444);
+            --gradient-4: linear-gradient(135deg, #ec4899, #8b5cf6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'IBM Plex Sans Thai', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            padding: 80px 20px 60px;
+            text-align: center;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.15) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 50%, rgba(139,92,246,0.1) 0%, transparent 50%),
+                        var(--bg);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23334155' fill-opacity='0.15'%3E%3Ccircle cx='1' cy='1' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-content { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(59,130,246,0.1);
+            border: 1px solid rgba(59,130,246,0.3);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 32px;
+        }
+
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+        /* Navigation */
+        .nav-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10,14,23,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 20px;
+        }
+
+        .nav-scroll {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            overflow-x: auto;
+            gap: 4px;
+            padding: 8px 0;
+            scrollbar-width: none;
+        }
+
+        .nav-scroll::-webkit-scrollbar { display: none; }
+
+        .nav-item {
+            white-space: nowrap;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(59,130,246,0.1);
+            color: var(--accent-blue);
+        }
+
+        /* Main */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 60px;
+            scroll-margin-top: 80px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .section-header h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--border-light);
+            background: var(--bg-card-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .card h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card p, .card li {
+            color: var(--text-muted);
+            line-height: 1.9;
+        }
+
+        .card ul {
+            list-style: none;
+            margin-top: 12px;
+        }
+
+        .card ul li {
+            padding: 6px 0 6px 24px;
+            position: relative;
+        }
+
+        .card ul li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        /* Highlight box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.08));
+            border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 16px 0;
+            font-size: 0.95rem;
+        }
+
+        .highlight-box.green {
+            background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(6,182,212,0.08));
+            border-color: rgba(16,185,129,0.2);
+        }
+
+        .highlight-box.orange {
+            background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(239,68,68,0.08));
+            border-color: rgba(245,158,11,0.2);
+        }
+
+        .highlight-box.pink {
+            background: linear-gradient(135deg, rgba(236,72,153,0.08), rgba(139,92,246,0.08));
+            border-color: rgba(236,72,153,0.2);
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            overflow-x: auto;
+            margin: 16px 0;
+            line-height: 1.7;
+            color: var(--accent-cyan);
+        }
+
+        .code-block .comment { color: var(--text-dim); }
+        .code-block .keyword { color: var(--accent-purple); }
+        .code-block .string { color: var(--accent-green); }
+        .code-block .function { color: var(--accent-orange); }
+
+        /* Grid layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        /* Mini card */
+        .mini-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .mini-card:hover {
+            border-color: var(--border-light);
+            transform: translateY(-2px);
+        }
+
+        .mini-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mini-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* Tag */
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            margin: 2px;
+        }
+
+        .tag-blue { background: rgba(59,130,246,0.15); color: var(--accent-blue); }
+        .tag-purple { background: rgba(139,92,246,0.15); color: var(--accent-purple); }
+        .tag-cyan { background: rgba(6,182,212,0.15); color: var(--accent-cyan); }
+        .tag-green { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+        .tag-orange { background: rgba(245,158,11,0.15); color: var(--accent-orange); }
+        .tag-pink { background: rgba(236,72,153,0.15); color: var(--accent-pink); }
+
+        /* Flow diagram */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 24px;
+            margin: 20px 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .flow-step {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .flow-arrow {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background: var(--bg-code);
+            padding: 14px 18px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: var(--accent-blue);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table td {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            background: var(--bg-card);
+        }
+
+        .comparison-table tr:last-child td { border-bottom: none; }
+        .comparison-table tr:hover td { background: var(--bg-card-hover); }
+
+        /* Numbered steps */
+        .step-list {
+            counter-reset: step;
+            list-style: none;
+        }
+
+        .step-list li {
+            counter-increment: step;
+            padding: 16px 16px 16px 60px;
+            position: relative;
+            margin-bottom: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-muted);
+        }
+
+        .step-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 16px;
+            top: 14px;
+            width: 30px;
+            height: 30px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: white;
+        }
+
+        .step-list li strong { color: var(--text); }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border);
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        .footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { padding: 50px 16px 40px; }
+            .hero h1 { font-size: 1.8rem; }
+            .container { padding: 24px 16px; }
+            .card { padding: 20px; }
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .flow-diagram { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span>🤖</span>
+            <span>AI Primer Series</span>
+        </div>
+        <h1>AI Agents — คู่มือฉบับสมบูรณ์</h1>
+        <p>สรุปเนื้อหาเรื่อง AI Agents แบบเจาะลึก ครอบคลุมตั้งแต่แนวคิดพื้นฐานไปจนถึง Design Patterns และ Frameworks สำหรับ AI Engineer</p>
+        <div class="hero-meta">
+            <span>📅 สรุปวันที่ 11 เม.ย. 2569</span>
+            <span>📖 อ้างอิงจาก aman.ai/primers/ai/agents</span>
+            <span>🎯 สำหรับ AI Engineers</span>
+        </div>
+    </div>
+</header>
+
+<!-- Navigation -->
+<nav class="nav-container">
+    <div class="nav-scroll">
+        <a class="nav-item" href="#overview">ภาพรวม</a>
+        <a class="nav-item" href="#components">ส่วนประกอบ</a>
+        <a class="nav-item" href="#design-patterns">Design Patterns</a>
+        <a class="nav-item" href="#react">ReAct Framework</a>
+        <a class="nav-item" href="#memory">Memory System</a>
+        <a class="nav-item" href="#tools">Tool Use</a>
+        <a class="nav-item" href="#planning">Planning</a>
+        <a class="nav-item" href="#multi-agent">Multi-Agent</a>
+        <a class="nav-item" href="#frameworks">Frameworks</a>
+        <a class="nav-item" href="#key-papers">งานวิจัยสำคัญ</a>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container">
+
+    <!-- 1. Overview -->
+    <section class="section" id="overview">
+        <div class="section-header">
+            <div class="section-icon" style="background: var(--gradient-1);">🧠</div>
+            <h2>AI Agents คืออะไร?</h2>
+        </div>
+
+        <div class="card">
+            <h3>🔹 นิยามพื้นฐาน</h3>
+            <p><strong>AI Agent</strong> คือระบบอัตโนมัติ (autonomous system) ที่รวมความสามารถในการ <em>ตัดสินใจ</em> และ <em>ลงมือทำ</em> เข้ากับพลังของ Large Language Models (LLMs) โดยที่ LLM ทำหน้าที่เป็น "สมอง" ของ Agent ซึ่งรับผิดชอบการตีความภาษา สร้าง response และวางแผนการทำงาน ขณะที่ Agent framework เป็นตัวจัดการให้ LLM สามารถ <strong>execute task</strong> ได้จริงในโลกภายนอก</p>
+
+            <div class="highlight-box">
+                <strong>💡 ความแตกต่างสำคัญ:</strong><br>
+                LLM เฉยๆ = แค่สร้างข้อความ (text generation)<br>
+                LLM + Agent Framework = สร้างข้อความ + ใช้เครื่องมือ + วางแผน + จดจำ + ดำเนินการ
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🔹 จาก Static สู่ Agentic</h3>
+            <p>Agentic design patterns ทำให้ AI models ก้าวข้าม static interactions ไปสู่ระบบที่สามารถ:</p>
+            <ul>
+                <li><strong>Dynamic Decision-Making</strong> — ตัดสินใจเลือกเส้นทางการทำงานแบบ real-time</li>
+                <li><strong>Self-Assessment</strong> — ประเมินผลงานตัวเอง แล้วปรับปรุง</li>
+                <li><strong>Iterative Improvement</strong> — ทำซ้ำรอบแล้วรอบเล่าจนได้ผลลัพธ์ที่ดีขึ้น</li>
+                <li><strong>Tool Interaction</strong> — เรียกใช้เครื่องมือภายนอก เช่น API, database, web search</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 2. Components -->
+    <section class="section" id="components">
+        <div class="section-header">
+            <div class="section-icon" style="background: var(--gradient-2);">⚙️</div>
+            <h2>ส่วนประกอบหลักของ AI Agent</h2>
+        </div>
+
+        <div class="grid-3">
+            <div class="mini-card">
+                <h4>🧠 LLM Backbone</h4>
+                <p>เป็น "สมอง" หลักที่ทำหน้าที่ reasoning, สร้างภาษา และวางแผน ซึ่งจะถูก activate ผ่าน prompt template ที่ระบุว่า agent จะทำงานอย่างไรและมี tools อะไรบ้าง</p>
+            </div>
+            <div class="mini-card">
+                <h4>👁️ Perception</h4>
+                <p>รับ input จากสภาพแวดล้อม ไม่ว่าจะเป็นข้อความจาก user, ข้อมูลจาก API, หรือ observations จากเครื่องมือที่ใช้</p>
+            </div>
+            <div class="mini-card">
+                <h4>💭 Reasoning</h4>
+                <p>คิดวิเคราะห์ แยกแยะปัญหา ตัดสินใจว่าจะทำอะไรต่อ โดยใช้เทคนิคเช่น Chain-of-Thought (CoT) prompting</p>
+            </div>
+            <div class="mini-card">
+                <h4>📋 Planning</h4>
+                <p>วางแผนขั้นตอนการทำงาน แตก task ใหญ่เป็น subtasks ย่อย จัดลำดับ และปรับแผนเมื่อสถานการณ์เปลี่ยน</p>
+            </div>
+            <div class="mini-card">
+                <h4>🧰 Tool Use</h4>
+                <p>เรียกใช้เครื่องมือภายนอก เช่น web search, code interpreter, calculator, APIs ต่างๆ เพื่อทำงานที่ LLM ทำเองไม่ได้</p>
+            </div>
+            <div class="mini-card">
+                <h4>💾 Memory</h4>
+                <p>จดจำบริบท ทั้ง short-term (ภายใน session) และ long-term (ข้าม session) เพื่อให้การทำงานต่อเนื่องและเรียนรู้จากอดีต</p>
+            </div>
+        </div>
+
+        <div class="highlight-box green" style="margin-top: 20px;">
+            <strong>🔗 Orchestration Layer:</strong> เป็นชั้นที่ประสานงานระหว่าง agents, tools, memory และ tasks โดยกำหนด control flow, sequencing และ error handling ซึ่งในระบบสมัยใหม่ จะแยก orchestration เป็น controller layer ออกมา ขณะที่ LLM โฟกัสแค่ local reasoning และ tool parameterization
+        </div>
+    </section>
+
+    <!-- 3. Design Patterns -->
+    <section class="section" id="design-patterns">
+        <div class="section-header">
+            <div class="section-icon" style="background: var(--gradient-4);">🎨</div>
+            <h2>4 Agentic Design Patterns หลัก</h2>
+        </div>
+
+        <p style="color: var(--text-muted); margin-bottom: 24px;">
+            Andrew Ng ได้นำเสนอ 4 design patterns สำคัญสำหรับ AI agentic workflows ที่เป็นแกนกลางของระบบ AI Agent สมัยใหม่
+        </p>
+
+        <div class="grid-2">
+            <div class="card" style="border-left: 3px solid var(--accent-blue);">
+                <h3><span class="tag tag-blue">Pattern 1</span> Reflection</h3>
+                <p>Agent ประเมินผลงานตัวเอง ค้นหาจุดที่ต้องปรับปรุง แล้วสร้าง output ใหม่ที่ดีขึ้น เป็นการ "self-evaluate and iteratively refine"</p>
+                <div class="highlight-box" style="margin-top: 12px;">
+                    <strong>ตัวอย่าง:</strong> ให้ LLM เขียนโค้ด → รันโค้ดดูว่ามี error ไหม → ถ้ามี error ก็ส่ง error message กลับไปให้ LLM แก้ → ทำซ้ำจนโค้ดผ่าน
+                </div>
+            </div>
+
+            <div class="card" style="border-left: 3px solid var(--accent-green);">
+                <h3><span class="tag tag-green">Pattern 2</span> Tool Use</h3>
+                <p>Agent ตัดสินใจเลือกเรียกใช้ function/tool ที่เหมาะสม เช่น web search, calendar, email, code execution เพื่อรวบรวมข้อมูลหรือดำเนินการ</p>
+                <div class="highlight-box green" style="margin-top: 12px;">
+                    <strong>ตัวอย่าง:</strong> ถามเรื่องสภาพอากาศ → Agent เรียก Weather API → ได้ข้อมูล → สร้างคำตอบจากข้อมูลจริง
+                </div>
+            </div>
+
+            <div class="card" style="border-left: 3px solid var(--accent-orange);">
+                <h3><span class="tag tag-orange">Pattern 3</span> Planning</h3>
+                <p>Agent วางแผนขั้นตอนทั้งหมดก่อนลงมือทำ โดยแตก complex task เป็น step-by-step plan ที่ execute ได้จริง และปรับแผนได้เมื่อเจอปัญหา</p>
+                <div class="highlight-box orange" style="margin-top: 12px;">
+                    <strong>สำคัญ:</strong> Planning ไม่จำเป็นสำหรับทุก workflow — task ง่ายๆ ที่มีลำดับชัดเจน อาจใช้แค่ deterministic step-by-step approach ก็พอ
+                </div>
+            </div>
+
+            <div class="card" style="border-left: 3px solid var(--accent-pink);">
+                <h3><span class="tag tag-pink">Pattern 4</span> Multi-Agent Collaboration</h3>
+                <p>หลาย agents ทำงานร่วมกัน โดยแต่ละตัวมี role และความเชี่ยวชาญต่างกัน ช่วยกันแก้ปัญหาที่ซับซ้อนโดยแบ่งเป็น subtasks</p>
+                <div class="highlight-box pink" style="margin-top: 12px;">
+                    <strong>ตัวอย่าง:</strong> สร้างซอฟต์แวร์ → แยกเป็น Agent: Software Engineer, Product Manager, Designer, QA Engineer แต่ละตัวทำหน้าที่ของตัวเอง
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. ReAct Framework -->
+    <section class="section" id="react">
+        <div class="section-header">
+            <div class="section-icon" style="background: var(--gradient-3);">🔄</div>
+            <h2>ReAct Framework: Reasoning + Acting</h2>
+        </div>
+
+        <div class="card">
+            <h3>🔹 แนวคิดหลัก</h3>
+            <p><strong>ReAct</strong> (ย่อจาก Reasoning + Acting) เป็น framework ที่ให้ LLM สร้างทั้ง <em>reasoning traces</em> (ความคิด) และ <em>task-specific actions</em> (การกระทำ) สลับกันไป ถูกนำเสนอครั้งแรกในปี 2023 จาก paper "ReAct: Synergizing Reasoning and Acting in Language Models"</p>
+
+            <div class="highlight-box">
+                <strong>🔑 หลักการสำคัญ:</strong><br>
+                • <strong>Reasoning traces</strong> → ช่วยให้ model สร้าง, ติดตาม และปรับ action plan รวมถึงจัดการ exceptions<br>
+                • <strong>Actions</strong> → ช่วยให้ model โต้ตอบกับแหล่งข้อมูลภายนอก เช่น knowledge base, APIs, environments
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🔹 วงจร Thought → Action → Observation</h3>
+            <p>ReAct agent ทำงานเป็น loop ซ้ำไปเรื่อยๆ จนกว่า task จะเสร็จ:</p>
+        </div>
+
+        <div class="flow-diagram">
+            <div class="flow-step" style="background: rgba(139,92,246,0.2); color: var(--accent-purple);">💭 Thought<br><small>คิดวิเคราะห์</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" style="background: rgba(59,130,246,0.2); color: var(--accent-blue);">⚡ Action<br><small>เรียก tool/API</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" style="background: rgba(16,185,129,0.2); color: var(--accent-green);">👁️ Observation<br><small>ดูผลลัพธ์</small></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" style="background: rgba(245,158,11,0.2); color: var(--accent-orange);">🔄 Repeat<br><small>หรือ ✅ Answer</small></div>
+        </div>
+
+        <div class="card">
+            <h3>🔹 ตัวอย่าง ReAct Loop</h3>
+            <div class="code-block">
+<span class="comment">// ตัวอย่าง: ถาม "ใครเป็นผู้ก่อตั้ง OpenAI?"</span>
+
+<span class="keyword">Thought:</span> ฉันต้องค้นหาข้อมูลเกี่ยวกับผู้ก่อตั้ง OpenAI
+<span class="keyword">Action:</span>  <span class="function">search</span>(<span class="string">"OpenAI founders"</span>)
+<span class="keyword">Observation:</span> OpenAI ก่อตั้งโดย Sam Altman, Elon Musk, Greg Brockman...
+
+<span class="keyword">Thought:</span> ได้คำตอบแล้ว สามารถตอบ user ได้
+<span class="keyword">Action:</span>  <span class="function">finish</span>(<span class="string">"ผู้ก่อตั้ง OpenAI ได้แก่ Sam Altman, Elon Musk..."</span>)
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🔹 ข้อดีของ ReAct</h3>
+            <ul>
+                <li><strong>Adaptive:</strong> ปรับกลยุทธ์ได้ตาม observation — ถ้า tool fail ก็ลองวิธีอื่น</li>
+                <li><strong>Interpretable:</strong> Thought steps ทำให้เห็น reasoning process ชัดเจน ช่วย debug ง่าย</li>
+                <li><strong>Grounded:</strong> ลด hallucination เพราะดึงข้อมูลจริงจากภายนอกมาประกอบ</li>
+                <li><strong>Flexible:</strong> ใช้ได้ตั้งแต่ simple RAG ไปจนถึง multi-agent workflows ที่ซับซ้อน</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>🔹 เปรียบเทียบ ReAct vs Plan-and-Execute</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>คุณลักษณะ</th>
+                        <th>ReAct</th>
+                        <th>Plan-and-Execute</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>แนวทาง</strong></td>
+                        <td>คิดและทำสลับกันทีละ step</td>
+                        <td>วางแผนทั้งหมดก่อน แล้วค่อย execute ทีละ step</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ความยืดหยุ่น</strong></td>
+                        <td>สูง — ปรับเปลี่ยนแผนได้ทุก step</td>
+                        <td>ปานกลาง — ปรับแผนได้แต่ต้อง re-plan</td>
+                    </tr>
+                    <tr>
+                        <td><strong>LLM Calls</strong></td>
+                        <td>มากกว่า (เรียกทุก step)</td>
+                        <td>น้อยกว่า (reasoning หลักอยู่ตอน plan)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>เหมาะกับ</strong></td>
+                        <td>Task ที่ไม่แน่นอน ต้องปรับตัว</td>
+                        <td>Task ที่ซับซ้อนแต่วางแผนได้ชัดเจน</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 5. Memory -->
+    <section class="section" id="memory">
+        <div class="section-header">
+            <div class="section-icon" style="background: var(--gradient-1);">💾</div>
+            <h2>Memory System ใน AI Agent</h2>
+        </div>
+
+        <div class="card">
+            <p>Memory คือระบบจัดเก็บข้อมูลที่ช่วยให้ Agent จดจำบริบท เรียนรู้จากอดีต และตอบสนองได้อย่างต่อเนื่อง แบ่งเป็นหลายระดับตามแนวคิดจากจิตวิทยาการรู้คิด (cognitive science)</p>
+        </div>
+
+        <div class="grid-2">
+            <div class="card" style="border-top: 3px solid var(--accent-cyan);">
+                <h3>⚡ Short-Term Memory</h3>
+                <p>เก็บ context ภายใน session เดียว เช่น conversation turns ล่าสุด, intermediate reasoning results, session context</p>
+                <ul>
+                    <li>ใช้ conversation buffer หรือ in-memory cache</li>
+                    <li>มี expiration timestamp</li>
+                    <li>จำกัดโดย context window ของ LLM</li>
+                </ul>
+            </div>
+
+            <div class="card" style="border-top: 3px solid var(--accent-purple);">
+                <h3>🏛️ Long-Term Memory</h3>
+                <p>เก็บข้อมูลข้าม session ดึงมาใช้เมื่อจำเป็น แบ่งย่อยเป็น 3 ประเภท:</p>
+            </div>
+        </div>
+
+        <div class="grid-3" style="margin-top: 16px;">
+            <div class="mini-card" style="border-top: 2px solid var(--accent-green);">
+                <h4>📸 Episodic Memory</h4>
+                <p>จดจำ "เหตุการณ์" ที่เกิดขึ้นในอดีตพร้อม temporal details เช่น "เมื่อ session ที่แล้ว user ให้อัพเดต Artifact X และชอบวิธี Y"</p>
+            </div>
+            <div class="mini-card" style="border-top: 2px solid var(--accent-blue);">
+                <h4>📚 Semantic Memory</h4>
+                <p>เก็บ "ความรู้ทั่วไป" — facts, definitions, rules, preferences เช่น "User ชอบ dark mode, ทำงานสาย fintech"</p>
+            </div>
+            <div class="mini-card" style="border-top: 2px solid var(--accent-orange);">
+                <h4>🔧 Procedural Memory</h4>
+                <p>เก็บ "วิธีการทำงาน" — workflows, skills, learned behaviors เช่น "ขั้นตอนอนุมัติ invoice: validate → route → notify"</p>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <h3>🔹 Memory vs RAG</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>คุณลักษณะ</th>
+                        <th>RAG</th>
+                        <th>Agent Memory</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>หน้าที่</strong></td>
+                        <td>ดึงเอกสารภายนอกมาเสริม context</td>
+                        <td>เก็บ state, preferences, decisions ที่เปลี่ยนแปลงได้</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ข้อมูล</strong></td>
+                        <td>Static documents</td>
+                        <td>Evolving state — เรียนรู้จาก interactions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Personalization</strong></td>
+                        <td>จำกัด</td>
+                        <td>สูง — จดจำ user preferences</td>
+                    </tr>
+                    <tr>
+                        <td><strong>วิวัฒนาการ</strong></td>
+                        <td>RAG → Agentic RAG → Agent Memory</td>
+                        <td>ผสมผสานทุกระดับ</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 6. Tool Use -->
+    <section class="section" id="tools">
+        <div class="section-header">
+            <div class="section-icon" style="background: var(--gradient-2);">🧰</div>
+            <h2>Tool Use — การใช้เครื่องมือภายนอก</h2>
+        </div>
+
+        <div class="card">
+            <h3>🔹 ทำไมต้องใช้ Tools?</h3>
+            <p>LLM เก่งเรื่อง reasoning แต่มีข้อจำกัดในเรื่อง: ข้อมูลไม่ real-time, คำนวณเลขไม่แม่น, เข้าถึงระบบภายนอกไม่ได้ ดังนั้น Tool Use จึงเป็น pattern ที่ให้ LLM ตัดสินใจเรียกใช้ function/API ที่เหมาะสมเพื่อแก้ปัญหาเหล่านี้</p>
+        </div>
+
+        <div class="card">
+            <h3>🔹 วิวัฒนาการของ Tool Use</h3>
+            <div class="grid-3" style="margin-top: 16px;">
+                <div class="mini-card">
+                    <h4><span class="tag tag-purple">2022</span> MRKL</h4>
+                    <p>Framework แรกๆ ที่รวม LLM กับ expert modules (ทั้ง LLM อื่นๆ หรือ symbolic tools เช่น calculator, weather API)</p>
+                </div>
+                <div class="mini-card">
+                    <h4><span class="tag tag-blue">2023</span> Toolformer</h4>
+                    <p>Fine-tune LLM ให้เรียนรู้วิธีเรียก APIs เอง จาก dataset ที่สร้างขึ้นมา ทำให้ LLM รู้จัก tool name และ input parameters</p>
+                </div>
+                <div class="mini-card">
+                    <h4><span class="tag tag-green">2024-26</span> Function Calling + MCP</h4>
+                    <p>Function calling กลายเป็นมาตรฐาน + MCP (Model Context Protocol) จาก Anthropic กลายเป็น "USB-C ของ agent tool integration"</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🔹 ตัวอย่าง Tools ที่ Agent ใช้ได้</h3>
+            <div class="grid-4">
+                <div style="text-align: center; padding: 12px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 6px;">🔍</div>
+                    <span class="tag tag-blue">Web Search</span>
+                </div>
+                <div style="text-align: center; padding: 12px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 6px;">💻</div>
+                    <span class="tag tag-purple">Code Interpreter</span>
+                </div>
+                <div style="text-align: center; padding: 12px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 6px;">🔢</div>
+                    <span class="tag tag-orange">Calculator</span>
+                </div>
+                <div style="text-align: center; padding: 12px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 6px;">📧</div>
+                    <span class="tag tag-green">Email / Calendar</span>
+                </div>
+                <div style="text-align: center; padding: 12px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 6px;">🗄️</div>
+                    <span class="tag tag-cyan">Database Query</span>
+                </div>
+                <div style="text-align: center; padding: 12px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 6px;">📊</div>
+                    <span class="tag tag-pink">Data Visualization</span>
+                </div>
+                <div style="text-align: center; padding: 12px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 6px;">🌐</div>
+                    <span class="tag tag-blue">API Calls</span>
+                </div>
+                <div style="text-align: center; padding: 12px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 6px;">📁</div>
+                    <span class="tag tag-purple">File Operations</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🔹 Function Calling Flow</h3>
+            <div class="code-block">
+<span class="comment">// 1. User ถามคำถาม</span>
+<span class="keyword">User:</span> <span class="string">"พรุ่งนี้กรุงเทพฝนจะตกไหม?"</span>
+
+<span class="comment">// 2. LLM ตัดสินใจว่าต้องใช้ tool</span>
+<span class="keyword">LLM Decision:</span> เรียก <span class="function">get_weather</span>(location=<span class="string">"Bangkok"</span>, date=<span class="string">"tomorrow"</span>)
+
+<span class="comment">// 3. System เรียก API จริง</span>
+<span class="keyword">API Response:</span> { temp: 32, rain_chance: 85%, humidity: 78% }
+
+<span class="comment">// 4. LLM สร้างคำตอบจากข้อมูลจริง</span>
+<span class="keyword">LLM:</span> <span class="string">"พรุ่งนี้กรุงเทพมีโอกาสฝนตก 85% อุณหภูมิ 32°C..."</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Planning -->
+    <section class="section" id="planning">
+        <div class="section-header">
+            <div class="section-icon" style="background: var(--gradient-3);">📋</div>
+            <h2>Planning — การวางแผนของ Agent</h2>
+        </div>
+
+        <div class="card">
+            <h3>🔹 ทำไมต้อง Plan?</h3>
+            <p>สำหรับ complex task ที่มีหลายขั้นตอน การวางแผนล่วงหน้าช่วยให้ Agent ทำงานได้มีประสิทธิภาพกว่า โดยแตก task ใหญ่เป็น executable steps ที่ชัดเจน แล้วปรับแผนเมื่อสิ่งที่คาดไว้ไม่เป็นไปตามนั้น</p>
+        </div>
+
+        <div class="card">
+            <h3>🔹 วิธีการ Planning ที่สำคัญ</h3>
+            <div class="grid-2" style="margin-top: 16px;">
+                <div class="mini-card">
+                    <h4>📐 Task Decomposition</h4>
+                    <p>แตก task ใหญ่เป็น subtasks ย่อยๆ ที่ manage ง่ายกว่า เช่น "เขียนบทความ" → outline → research → draft → edit → review</p>
+                </div>
+                <div class="mini-card">
+                    <h4>🔄 Adaptive Re-planning</h4>
+                    <p>ปรับแผนได้เมื่อเจอ unexpected results — ไม่ใช่แค่ทำตาม plan เดิมอย่างเดียว</p>
+                </div>
+                <div class="mini-card">
+                    <h4>🌳 Tree of Thoughts</h4>
+                    <p>สำรวจหลาย reasoning paths พร้อมกัน เลือก path ที่ดีที่สุด เหมือนเล่นหมากรุกที่คิดหลาย moves ล่วงหน้า</p>
+                </div>
+                <div class="mini-card">
+                    <h4>📊 Plan-and-Execute</h4>
+                    <p>วางแผนทั้งหมดก่อนในขั้นตอนเดียว แล้วค่อย execute ทีละ step — ใช้ LLM calls น้อยกว่า ReAct</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🔹 ตัวอย่าง Planning Flow</h3>
+            <ol class="step-list">
+                <li><strong>รับ Task:</strong> "วิเคราะห์แนวโน้มตลาด AI ในไทย แล้วเขียนรายงาน"</li>
+                <li><strong>Decompose:</strong> แตกเป็น subtasks — ค้นหาข้อมูล, วิเคราะห์ trends, ระบุ key players, สรุปผล</li>
+                <li><strong>Select Tools:</strong> เลือก tools — web search, data analysis, document writer</li>
+                <li><strong>Execute:</strong> ทำทีละ step, เก็บ intermediate results</li>
+                <li><strong>Adapt:</strong> ถ้าพบข้อมูลใหม่ที่สำคัญ → ปรับแผนเพิ่ม subtask</li>
+                <li><strong>Synthesize:</strong> รวมผลทั้งหมดเป็นรายงานฉบับสมบูรณ์</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- 8. Multi-Agent -->
+    <section class="section" id="multi-agent">
+        <div class="section-header">
+            <div class="section-icon" style="background: var(--gradient-4);">👥</div>
+            <h2>Multi-Agent Collaboration</h2>
+        </div>
+
+        <div class="card">
+            <h3>🔹 แนวคิด</h3>
+            <p>แทนที่จะใช้ Agent ตัวเดียวทำทุกอย่าง ให้แบ่งงานให้ <strong>หลาย Agents</strong> โดยแต่ละตัวมี role, expertise และ tools เฉพาะทาง ทำงานร่วมกันเหมือนทีมงานจริงๆ</p>
+        </div>
+
+        <div class="card">
+            <h3>🔹 ตัวอย่าง: สร้างซอฟต์แวร์ด้วย Multi-Agent</h3>
+            <div class="grid-2" style="margin-top: 16px;">
+                <div class="mini-card" style="border-left: 3px solid var(--accent-blue);">
+                    <h4>👔 Product Manager Agent</h4>
+                    <p>กำหนด requirements, จัดลำดับ features, ตัดสินใจ scope</p>
+                </div>
+                <div class="mini-card" style="border-left: 3px solid var(--accent-green);">
+                    <h4>💻 Software Engineer Agent</h4>
+                    <p>เขียน code, implement features, แก้ bugs</p>
+                </div>
+                <div class="mini-card" style="border-left: 3px solid var(--accent-purple);">
+                    <h4>🎨 Designer Agent</h4>
+                    <p>ออกแบบ UI/UX, สร้าง mockups, กำหนด design system</p>
+                </div>
+                <div class="mini-card" style="border-left: 3px solid var(--accent-orange);">
+                    <h4>🧪 QA Engineer Agent</h4>
+                    <p>เขียน test cases, ทำ testing, รายงาน bugs</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🔹 รูปแบบการสื่อสารระหว่าง Agents</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>รูปแบบ</th>
+                        <th>คำอธิบาย</th>
+                        <th>ใช้เมื่อไหร่</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Conversation-based</strong></td>
+                        <td>Agents คุยกันผ่าน messages เหมือนแชท</td>
+                        <td>Tasks ที่ต้อง negotiate หรือถกเถียง</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Task Delegation</strong></td>
+                        <td>Agent หนึ่งมอบหมายงานให้อีกตัว</td>
+                        <td>Tasks ที่แบ่งหน้าที่ชัดเจน</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Shared State</strong></td>
+                        <td>Agents แชร์ state/memory ร่วมกัน</td>
+                        <td>Tasks ที่ต้องเห็นข้อมูลตัวเดียวกัน</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pipeline</strong></td>
+                        <td>ส่งผลลัพธ์ต่อกันเป็นทอดๆ</td>
+                        <td>Tasks ที่มีลำดับขั้นตอนชัด</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 9. Frameworks -->
+    <section class="section" id="frameworks">
+        <div class="section-header">
+            <div class="section-icon" style="background: var(--gradient-2);">🏗️</div>
+            <h2>Agent Frameworks ยอดนิยม</h2>
+        </div>
+
+        <div class="card">
+            <p>ปัจจุบัน (2025-2026) มี frameworks หลักๆ ที่นิยมใช้สร้าง AI Agent systems ดังนี้:</p>
+        </div>
+
+        <div class="grid-2">
+            <div class="card" style="border-top: 3px solid var(--accent-green);">
+                <h3>🦜 LangChain / LangGraph</h3>
+                <p><strong>Modular Orchestrator</strong> — framework ที่เป็นที่นิยมที่สุด ทำให้การสร้าง chains, agents, memory integrations เป็นเรื่องง่าย</p>
+                <ul>
+                    <li>LangGraph ขยายเป็น multi-agent workflows ที่แต่ละ node เป็น agent ที่มี prompt, tools, logic ของตัวเอง</li>
+                    <li>Production-ready ใช้งานจริงได้</li>
+                </ul>
+                <div style="margin-top: 12px;">
+                    <span class="tag tag-green">Graph-based</span>
+                    <span class="tag tag-blue">Modular</span>
+                    <span class="tag tag-purple">Production</span>
+                </div>
+            </div>
+
+            <div class="card" style="border-top: 3px solid var(--accent-blue);">
+                <h3>🤖 AutoGen (Microsoft)</h3>
+                <p><strong>Conversation-first Framework</strong> — ออกแบบมาเพื่อ multi-agent collaboration ผ่าน conversation</p>
+                <ul>
+                    <li>Agents แลกเปลี่ยน messages, delegate tasks, หา consensus ผ่าน structured dialogue</li>
+                    <li>เหมาะกับ scenarios ที่ต้องถกเถียง/ปรึกษากัน</li>
+                </ul>
+                <div style="margin-top: 12px;">
+                    <span class="tag tag-blue">Conversation</span>
+                    <span class="tag tag-orange">Multi-Agent</span>
+                    <span class="tag tag-green">Production</span>
+                </div>
+            </div>
+
+            <div class="card" style="border-top: 3px solid var(--accent-orange);">
+                <h3>🚢 CrewAI</h3>
+                <p><strong>Role-based Task Execution</strong> — สร้าง "ทีม" ของ agents ที่มี role ชัดเจน</p>
+                <ul>
+                    <li>สถาปัตยกรรม 2 ชั้น: <strong>Crews</strong> (dynamic, role-based collaboration) + <strong>Flows</strong> (deterministic, event-driven orchestration)</li>
+                    <li>เหมาะกับงานที่แบ่งบทบาทชัดเจน</li>
+                </ul>
+                <div style="margin-top: 12px;">
+                    <span class="tag tag-orange">Role-based</span>
+                    <span class="tag tag-pink">Crew/Flow</span>
+                    <span class="tag tag-green">Production</span>
+                </div>
+            </div>
+
+            <div class="card" style="border-top: 3px solid var(--accent-purple);">
+                <h3>🔗 OpenAI Agents SDK + Others</h3>
+                <p><strong>Vendor SDKs</strong> — SDK จาก AI labs ใหญ่ๆ ที่ให้ native agent capabilities</p>
+                <ul>
+                    <li>OpenAI Agents SDK, Claude Agent SDK (Anthropic)</li>
+                    <li>ใหม่กว่าแต่ backed โดย major AI labs</li>
+                </ul>
+                <div style="margin-top: 12px;">
+                    <span class="tag tag-purple">Native</span>
+                    <span class="tag tag-cyan">First-party</span>
+                    <span class="tag tag-blue">Evolving</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="highlight-box green" style="margin-top: 20px;">
+            <strong>🔌 MCP (Model Context Protocol):</strong> มาตรฐานเปิดจาก Anthropic สำหรับเชื่อมต่อ agents กับ tools — กำลังกลายเป็น "USB-C ของ agent tool integration" ทุก framework กำลัง adopt MCP เป็นมาตรฐานกลาง
+        </div>
+    </section>
+
+    <!-- 10. Key Papers -->
+    <section class="section" id="key-papers">
+        <div class="section-header">
+            <div class="section-icon" style="background: var(--gradient-3);">📄</div>
+            <h2>งานวิจัย & แหล่งอ้างอิงสำคัญ</h2>
+        </div>
+
+        <div class="card">
+            <h3>🔹 Papers ที่ต้องรู้</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Paper / Resource</th>
+                        <th>ปี</th>
+                        <th>สาระสำคัญ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>ReAct: Synergizing Reasoning and Acting</strong></td>
+                        <td>2022</td>
+                        <td>Framework หลักที่รวม reasoning + action ใน LLM agents</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MRKL Systems</strong></td>
+                        <td>2022</td>
+                        <td>แนวคิดรวม LLM กับ expert modules (symbolic + neural)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Toolformer</strong></td>
+                        <td>2023</td>
+                        <td>สอน LLM ให้เรียนรู้วิธีเรียก APIs ด้วยตัวเอง</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Chain-of-Thought Prompting</strong></td>
+                        <td>2022</td>
+                        <td>เทคนิค prompting ให้ LLM คิดทีละขั้นตอน — พื้นฐานของ reasoning ใน agents</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Andrew Ng's Agentic Design Patterns</strong></td>
+                        <td>2024</td>
+                        <td>4 patterns: Reflection, Tool Use, Planning, Multi-Agent Collaboration</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Building Effective Agents (Anthropic)</strong></td>
+                        <td>2024</td>
+                        <td>แนวทางปฏิบัติจาก Anthropic ในการสร้าง agent ที่ใช้งานได้จริง</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h3>🔹 สรุป Key Takeaways สำหรับ AI Engineer</h3>
+            <div class="highlight-box">
+                <strong>1. เข้าใจ Core Loop:</strong> Agent = LLM + Tools + Memory + Planning ทำงานเป็น loop ของ Perceive → Think → Act → Observe
+            </div>
+            <div class="highlight-box green">
+                <strong>2. เลือก Pattern ให้เหมาะ:</strong> ไม่จำเป็นต้องใช้ทุก pattern — task ง่ายๆ อาจแค่ tool use ก็พอ, task ซับซ้อนค่อยเพิ่ม planning + multi-agent
+            </div>
+            <div class="highlight-box orange">
+                <strong>3. Memory เป็นตัวแบ่ง:</strong> Agent ที่มี memory ดี = personalized + context-aware ส่วน agent ที่ไม่มี memory = stateless ทุก interaction
+            </div>
+            <div class="highlight-box pink">
+                <strong>4. Production != Research:</strong> ใน production ต้องคิดเรื่อง error handling, cost management, latency, observability ด้วย ไม่ใช่แค่ accuracy
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>สรุปเนื้อหาจาก <a href="https://aman.ai/primers/ai/agents/" target="_blank">Aman's AI Journal — Agents Primer</a></p>
+    <p style="margin-top: 8px;">สร้างโดย Claude สำหรับ Ton | อัพเดต 11 เม.ย. 2569</p>
+</footer>
+
+<script>
+    // Smooth scroll for nav
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.querySelector(item.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    // Active nav on scroll
+    const sections = document.querySelectorAll('.section');
+    const navItems = document.querySelectorAll('.nav-item');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const top = section.offsetTop - 100;
+            if (window.pageYOffset >= top) current = section.getAttribute('id');
+        });
+        navItems.forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('href') === '#' + current) item.classList.add('active');
+        });
+    });
+</script>
+
+</body>
+</html>
