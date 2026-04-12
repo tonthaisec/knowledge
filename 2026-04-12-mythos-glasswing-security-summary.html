@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สรุป Claude Mythos & Project Glasswing — มุมมองด้าน Security</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --bg: #0a0e1a;
+            --surface: #111827;
+            --surface2: #1a2236;
+            --accent: #6366f1;
+            --accent2: #818cf8;
+            --danger: #ef4444;
+            --danger-soft: #fca5a5;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --text: #e5e7eb;
+            --text-dim: #9ca3af;
+            --border: #374151;
+            --glow: rgba(99, 102, 241, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans Thai', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 800px 600px at 30% 20%, rgba(99,102,241,0.15), transparent),
+                radial-gradient(ellipse 600px 400px at 70% 80%, rgba(239,68,68,0.1), transparent);
+        }
+        /* Animated grid */
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        .hero-content { position: relative; z-index: 1; max-width: 900px; }
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        .hero .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        .hero .tags {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .hero .tag {
+            background: rgba(99,102,241,0.15);
+            border: 1px solid rgba(99,102,241,0.3);
+            color: var(--accent2);
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Container */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* Section titles */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-top: 3rem;
+        }
+        .section-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+        .section-title h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+        .section-title p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.3s;
+        }
+        .card:hover { border-color: var(--accent); }
+
+        /* Info box with icon */
+        .info-box {
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+            background: var(--surface2);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .info-box .icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+        .info-box h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+        }
+        .info-box p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        /* Risk meter */
+        .risk-meter {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .risk-meter h3 { margin-bottom: 1.25rem; font-size: 1.15rem; }
+        .meter-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .meter-label {
+            width: 220px;
+            font-size: 0.88rem;
+            flex-shrink: 0;
+        }
+        .meter-bar-bg {
+            flex: 1;
+            height: 12px;
+            background: var(--surface2);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .meter-bar {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 1.5s ease;
+        }
+        .meter-value {
+            width: 50px;
+            text-align: right;
+            font-weight: 600;
+            font-size: 0.88rem;
+        }
+
+        /* Timeline */
+        .timeline { position: relative; padding-left: 2.5rem; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent), var(--danger), var(--success));
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -2.5rem;
+            top: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+        .timeline-item h4 { font-weight: 600; margin-bottom: 0.25rem; }
+        .timeline-item p { color: var(--text-dim); font-size: 0.9rem; }
+
+        /* Stat grid */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 0.25rem;
+        }
+
+        /* Vulnerability table */
+        .vuln-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .vuln-table th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 2px solid var(--border);
+            color: var(--text-dim);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .vuln-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(55,65,81,0.5);
+        }
+        .severity-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .sev-critical { background: rgba(239,68,68,0.2); color: #fca5a5; }
+        .sev-high { background: rgba(245,158,11,0.2); color: #fcd34d; }
+
+        /* Diagram: Attack flow */
+        .diagram {
+            background: var(--surface2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            flex-wrap: wrap;
+            min-width: fit-content;
+        }
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 140px;
+        }
+        .flow-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            border: 2px solid;
+        }
+        .flow-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .flow-sub {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+        }
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--text-dim);
+            margin: 0 0.25rem;
+        }
+
+        /* Defense shield diagram */
+        .shield-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .shield-card {
+            background: linear-gradient(135deg, var(--surface2), var(--surface));
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .shield-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+        .shield-card.green::before { background: var(--success); }
+        .shield-card.blue::before { background: var(--accent); }
+        .shield-card.yellow::before { background: var(--warning); }
+        .shield-card.red::before { background: var(--danger); }
+        .shield-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        .shield-card p {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+        .shield-card ul {
+            list-style: none;
+            margin-top: 0.5rem;
+        }
+        .shield-card li {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            padding: 0.2rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+        .shield-card li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent2);
+        }
+
+        /* Partner logos */
+        .partner-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+        .partner-chip {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text-dim);
+        }
+
+        /* Callout */
+        .callout {
+            border-left: 4px solid;
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        .callout.warn {
+            border-color: var(--warning);
+            background: rgba(245,158,11,0.08);
+        }
+        .callout.danger {
+            border-color: var(--danger);
+            background: rgba(239,68,68,0.08);
+        }
+        .callout.info {
+            border-color: var(--accent);
+            background: rgba(99,102,241,0.08);
+        }
+        .callout.success {
+            border-color: var(--success);
+            background: rgba(16,185,129,0.08);
+        }
+
+        /* CITO takeaway */
+        .takeaway {
+            background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(192,132,252,0.08));
+            border: 1px solid rgba(99,102,241,0.25);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .takeaway h3 {
+            color: var(--accent2);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        .takeaway-items {
+            display: grid;
+            gap: 0.75rem;
+        }
+        .takeaway-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        .takeaway-item .num {
+            background: var(--accent);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .takeaway-item p { font-size: 0.92rem; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            margin-top: 4rem;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { min-height: 50vh; padding: 3rem 1.5rem; }
+            .meter-label { width: 140px; font-size: 0.8rem; }
+            .flow { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Claude Mythos & Project Glasswing</h1>
+        <p class="subtitle">สรุปเนื้อหาเชิง Security — เมื่อ AI ค้นพบช่องโหว่ได้ดีกว่ามนุษย์ องค์กรต้องปรับตัวอย่างไร?</p>
+        <div class="tags">
+            <span class="tag">Zero-Day Discovery</span>
+            <span class="tag">AI Cybersecurity</span>
+            <span class="tag">Critical Infrastructure</span>
+            <span class="tag">Anthropic 2026</span>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+
+    <!-- ==================== OVERVIEW ==================== -->
+    <div class="section-title fade-in">
+        <div class="section-icon" style="background:rgba(99,102,241,0.15); color:var(--accent2);">📋</div>
+        <div>
+            <h2>ภาพรวม — เกิดอะไรขึ้น?</h2>
+            <p>สองประกาศสำคัญจาก Anthropic ที่เปลี่ยนโลก Cybersecurity</p>
+        </div>
+    </div>
+
+    <div class="info-box fade-in">
+        <div class="icon" style="background:rgba(192,132,252,0.15); color:#c084fc;">🧠</div>
+        <div>
+            <h4>Claude Mythos Preview คืออะไร?</h4>
+            <p>โมเดล AI ขั้นสูงรุ่นใหม่จาก Anthropic ที่มีความสามารถด้าน <strong style="color:#c084fc;">code, reasoning และ autonomy</strong> สูงมากจนสามารถ ค้นหา Zero-Day Vulnerabilities ได้เองโดยอัตโนมัติ — พบช่องโหว่ระดับ Critical ในระบบปฏิบัติการ เบราว์เซอร์ และซอฟต์แวร์สำคัญระดับโลก หลายพันรายการ รวมถึงช่องโหว่ที่ซ่อนอยู่นานกว่า 27 ปี</p>
+        </div>
+    </div>
+
+    <div class="info-box fade-in">
+        <div class="icon" style="background:rgba(16,185,129,0.15); color:var(--success);">🦋</div>
+        <div>
+            <h4>Project Glasswing คืออะไร?</h4>
+            <p>โครงการความร่วมมือด้าน Cybersecurity ระดับโลก ที่ Anthropic ร่วมกับบริษัทเทคโนโลยีชั้นนำกว่า 40 แห่ง เช่น AWS, Microsoft, Google, Apple, Cisco, CrowdStrike ฯลฯ เพื่อ <strong style="color:var(--success);">ใช้ Mythos ค้นหาและแก้ไขช่องโหว่ในโครงสร้างพื้นฐานที่สำคัญ</strong> ก่อนที่ผู้ไม่หวังดีจะนำไปใช้ประโยชน์</p>
+        </div>
+    </div>
+
+    <!-- ==================== KEY STATS ==================== -->
+    <div class="stat-grid fade-in">
+        <div class="stat-card">
+            <div class="stat-number" style="color:var(--danger);">1,000+</div>
+            <div class="stat-label">ช่องโหว่ระดับ High/Critical ที่พบ</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="color:var(--warning);">27 ปี</div>
+            <div class="stat-label">ช่องโหว่เก่าที่สุดที่พบ</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="color:var(--accent2);">$50–$10K</div>
+            <div class="stat-label">ต้นทุนค้นหาช่องโหว่ต่อโปรเจกต์</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="color:var(--success);">$100M</div>
+            <div class="stat-label">เครดิตสนับสนุนจาก Glasswing</div>
+        </div>
+    </div>
+
+    <!-- ==================== SECURITY CONCERNS ==================== -->
+    <div class="section-title fade-in">
+        <div class="section-icon" style="background:rgba(239,68,68,0.15); color:var(--danger);">⚠️</div>
+        <div>
+            <h2>ข้อกังวลด้าน Security</h2>
+            <p>ทำไมเรื่องนี้ถึงเป็น "Watershed Moment" ของวงการ Cybersecurity</p>
+        </div>
+    </div>
+
+    <div class="callout danger fade-in">
+        <strong>ประเด็นสำคัญ:</strong> ต้นทุน ความพยายาม และระดับความเชี่ยวชาญที่ต้องใช้ในการค้นหาและโจมตีช่องโหว่ซอฟต์แวร์ <strong>ลดลงอย่างมาก</strong> — คนที่ไม่ใช่ผู้เชี่ยวชาญด้าน Security สามารถสั่งให้ AI ค้นหาช่องโหว่ข้ามคืน แล้วได้ working exploit ตอนเช้า
+    </div>
+
+    <!-- AI attack capability diagram -->
+    <h3 style="font-size:1.1rem; margin:1.5rem 0 0.5rem;">🔄 กระบวนการที่ AI สามารถทำได้แบบอัตโนมัติ</h3>
+    <div class="diagram fade-in">
+        <div class="flow">
+            <div class="flow-step">
+                <div class="flow-icon" style="background:rgba(99,102,241,0.15); border-color:var(--accent2); color:var(--accent2);">🔍</div>
+                <span class="flow-label">สแกนโค้ด</span>
+                <span class="flow-sub">Source & Binary</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+                <div class="flow-icon" style="background:rgba(245,158,11,0.15); border-color:var(--warning); color:var(--warning);">🐛</div>
+                <span class="flow-label">พบช่องโหว่</span>
+                <span class="flow-sub">Zero-Day Bugs</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+                <div class="flow-icon" style="background:rgba(239,68,68,0.15); border-color:var(--danger); color:var(--danger);">💣</div>
+                <span class="flow-label">สร้าง Exploit</span>
+                <span class="flow-sub">RCE / Priv Esc</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+                <div class="flow-icon" style="background:rgba(239,68,68,0.2); border-color:#f87171; color:#f87171;">🎯</div>
+                <span class="flow-label">โจมตีเป้าหมาย</span>
+                <span class="flow-sub">ข้ามคืนได้</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Risk areas -->
+    <div class="risk-meter fade-in">
+        <h3>📊 ระดับความเสี่ยงที่ Mythos เปิดเผย</h3>
+        <div class="meter-row">
+            <span class="meter-label">🖥️ ระบบปฏิบัติการ (OS)</span>
+            <div class="meter-bar-bg"><div class="meter-bar" style="width:95%;background:linear-gradient(90deg,var(--danger),#f87171));"></div></div>
+            <span class="meter-value" style="color:var(--danger);">95%</span>
+        </div>
+        <div class="meter-row">
+            <span class="meter-label">🌐 เว็บเบราว์เซอร์</span>
+            <div class="meter-bar-bg"><div class="meter-bar" style="width:90%;background:linear-gradient(90deg,var(--danger),#fb923c);"></div></div>
+            <span class="meter-value" style="color:var(--danger);">90%</span>
+        </div>
+        <div class="meter-row">
+            <span class="meter-label">🔐 ไลบรารี Crypto/TLS</span>
+            <div class="meter-bar-bg"><div class="meter-bar" style="width:80%;background:linear-gradient(90deg,var(--warning),#fbbf24);"></div></div>
+            <span class="meter-value" style="color:var(--warning);">80%</span>
+        </div>
+        <div class="meter-row">
+            <span class="meter-label">🎬 Media Processing</span>
+            <div class="meter-bar-bg"><div class="meter-bar" style="width:75%;background:linear-gradient(90deg,var(--warning),#fbbf24);"></div></div>
+            <span class="meter-value" style="color:var(--warning);">75%</span>
+        </div>
+        <div class="meter-row">
+            <span class="meter-label">🌍 Web Application Logic</span>
+            <div class="meter-bar-bg"><div class="meter-bar" style="width:70%;background:linear-gradient(90deg,#f59e0b,#fcd34d);"></div></div>
+            <span class="meter-value" style="color:var(--warning);">70%</span>
+        </div>
+    </div>
+
+    <!-- Notable CVEs -->
+    <div class="card fade-in" style="overflow-x:auto;">
+        <h3 style="margin-bottom:1rem;">🔬 ตัวอย่างช่องโหว่สำคัญที่ Mythos ค้นพบ</h3>
+        <table class="vuln-table">
+            <thead>
+                <tr>
+                    <th>ระบบ</th>
+                    <th>ช่องโหว่</th>
+                    <th>ซ่อนอยู่</th>
+                    <th>ระดับ</th>
+                    <th>ผลกระทบ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>OpenBSD</strong></td>
+                    <td>TCP SACK signed integer overflow</td>
+                    <td>27 ปี</td>
+                    <td><span class="severity-badge sev-critical">Critical</span></td>
+                    <td>Remote DoS — ทำให้ระบบล่มจากระยะไกล</td>
+                </tr>
+                <tr>
+                    <td><strong>FFmpeg</strong></td>
+                    <td>H.264 heap corruption (slice numbering)</td>
+                    <td>16 ปี</td>
+                    <td><span class="severity-badge sev-critical">Critical</span></td>
+                    <td>ฝังโค้ดอันตรายผ่านไฟล์วิดีโอ</td>
+                </tr>
+                <tr>
+                    <td><strong>FreeBSD NFS</strong></td>
+                    <td>CVE-2026-4747 — Stack buffer overflow</td>
+                    <td>17 ปี</td>
+                    <td><span class="severity-badge sev-critical">Critical</span></td>
+                    <td>ได้ root access โดยไม่ต้อง login</td>
+                </tr>
+                <tr>
+                    <td><strong>Linux Kernel</strong></td>
+                    <td>Privilege escalation chains + KASLR bypass</td>
+                    <td>—</td>
+                    <td><span class="severity-badge sev-critical">Critical</span></td>
+                    <td>ยกระดับสิทธิ์จาก user ธรรมดาเป็น root</td>
+                </tr>
+                <tr>
+                    <td><strong>TLS/AES-GCM/SSH</strong></td>
+                    <td>Implementation flaws ใน Crypto libraries</td>
+                    <td>—</td>
+                    <td><span class="severity-badge sev-high">High</span></td>
+                    <td>ปลอม Certificate หรือถอดรหัสข้อมูล</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="callout warn" style="margin-top:1rem; margin-bottom:0;">
+            <strong>สิ่งที่น่ากังวล:</strong> หลายช่องโหว่เหล่านี้ เครื่องมือ fuzzing อัตโนมัติทดสอบมากกว่า 5 ล้านครั้ง ก็ยังตรวจไม่เจอ — แต่ AI หาเจอได้
+        </div>
+    </div>
+
+    <!-- ==================== WHY IT MATTERS ==================== -->
+    <div class="section-title fade-in">
+        <div class="section-icon" style="background:rgba(245,158,11,0.15); color:var(--warning);">💡</div>
+        <div>
+            <h2>ทำไมเรื่องนี้ถึงสำคัญ?</h2>
+            <p>ผลกระทบต่อ Threat Landscape ที่องค์กรต้องเตรียมรับมือ</p>
+        </div>
+    </div>
+
+    <div class="card fade-in">
+        <div style="display:grid; gap:1.25rem;">
+            <div class="info-box" style="margin-bottom:0;">
+                <div class="icon" style="background:rgba(239,68,68,0.15); color:var(--danger);">1️⃣</div>
+                <div>
+                    <h4>ต้นทุนการโจมตีลดลงอย่างมาก</h4>
+                    <p>จากเดิมที่ต้องเป็น Expert ด้าน Security ถึงจะค้นหาช่องโหว่ได้ ตอนนี้คนทั่วไปสามารถใช้ AI ค้นหาและสร้าง Exploit ได้ด้วยต้นทุนเพียง $50–$10,000 ต่อโปรเจกต์ — ถูกกว่าการจ้างแฮกเกอร์หลายเท่า</p>
+                </div>
+            </div>
+            <div class="info-box" style="margin-bottom:0;">
+                <div class="icon" style="background:rgba(245,158,11,0.15); color:var(--warning);">2️⃣</div>
+                <div>
+                    <h4>ความเร็วในการค้นพบช่องโหว่เพิ่มขึ้นแบบก้าวกระโดด</h4>
+                    <p>AI สามารถสแกนโค้ดขนาดใหญ่ ทำ reverse engineering จาก binary และสร้าง exploit chain ที่ซับซ้อนได้ <strong>ภายในข้ามคืน</strong> — สิ่งที่เดิมใช้เวลาหลายสัปดาห์หรือหลายเดือน</p>
+                </div>
+            </div>
+            <div class="info-box" style="margin-bottom:0;">
+                <div class="icon" style="background:rgba(192,132,252,0.15); color:#c084fc;">3️⃣</div>
+                <div>
+                    <h4>Legacy System เสี่ยงที่สุด</h4>
+                    <p>ช่องโหว่ที่ซ่อนอยู่ 17–27 ปี แสดงให้เห็นว่าระบบเก่าที่ "เสถียร" อาจไม่ได้ปลอดภัยอย่างที่คิด — โดยเฉพาะระบบที่ไม่มี vendor support แล้ว</p>
+                </div>
+            </div>
+            <div class="info-box" style="margin-bottom:0;">
+                <div class="icon" style="background:rgba(99,102,241,0.15); color:var(--accent2);">4️⃣</div>
+                <div>
+                    <h4>Friction-based Defense ไม่พอแล้ว</h4>
+                    <p>การป้องกันแบบเดิมที่อาศัยความยากของการโจมตีเป็นเกราะ (security through obscurity) จะไม่ได้ผลอีกต่อไป เมื่อ AI ลดอุปสรรคทั้งหมดลง</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== DEFENSES ==================== -->
+    <div class="section-title fade-in">
+        <div class="section-icon" style="background:rgba(16,185,129,0.15); color:var(--success);">🛡️</div>
+        <div>
+            <h2>แนวทางการป้องกันและรับมือ</h2>
+            <p>คำแนะนำจาก Anthropic และ Project Glasswing</p>
+        </div>
+    </div>
+
+    <!-- Defense categories -->
+    <div class="shield-grid fade-in">
+        <div class="shield-card red">
+            <h4>🚨 เร่งด่วน — ทำทันที</h4>
+            <ul>
+                <li>ใช้ AI (เช่น Claude Opus 4.6) สแกนหาช่องโหว่ในระบบของตัวเองก่อน</li>
+                <li>สร้าง Pipeline สำหรับ AI-assisted vulnerability scanning</li>
+                <li>จัดทำ Triage process สำหรับ bug report ที่มาจาก AI</li>
+                <li>เปิด Automatic updates ในทุกระบบที่ทำได้</li>
+            </ul>
+        </div>
+        <div class="shield-card yellow">
+            <h4>⚡ ระยะสั้น — Patch Management</h4>
+            <ul>
+                <li>ลดเวลา Time-to-Patch ลงอย่างมีนัยสำคัญ</li>
+                <li>ปรับ Security Update เป็น "Urgent" ไม่ใช่ "Routine"</li>
+                <li>ปรับปรุง Vulnerability Disclosure Policy ให้รองรับ AI-accelerated discovery</li>
+                <li>เตรียมแผนฉุกเฉินกรณีพบช่องโหว่ในซอฟต์แวร์ที่ไม่มี support</li>
+            </ul>
+        </div>
+        <div class="shield-card blue">
+            <h4>🏗️ ระยะกลาง — Infrastructure</h4>
+            <ul>
+                <li>ย้ายออกจาก Legacy System ที่ไม่ปลอดภัยให้เร็วขึ้น</li>
+                <li>เพิ่ม Defense-in-Depth — ป้องกันหลายชั้น ไม่พึ่งแค่ชั้นเดียว</li>
+                <li>Automate Incident Response ด้วย AI — alert triage, event summarization, threat hunting</li>
+                <li>ทบทวน Supply Chain Security ทั้งหมด</li>
+            </ul>
+        </div>
+        <div class="shield-card green">
+            <h4>🌱 ระยะยาว — Organizational</h4>
+            <ul>
+                <li>เพิ่มบุคลากรด้าน Security ให้รองรับ Incident ระดับ Critical</li>
+                <li>ปรับ Secure Development Lifecycle ให้มี AI เป็นส่วนหนึ่ง</li>
+                <li>คิดใหม่ตั้งแต่พื้นฐาน (Ground-up reimagining) ของ Security Practices ทั้งหมด</li>
+                <li>ร่วมมือกับ Vendor และ Community ผ่านโครงการอย่าง Glasswing</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ==================== GLASSWING COLLABORATION ==================== -->
+    <div class="section-title fade-in">
+        <div class="section-icon" style="background:rgba(16,185,129,0.15); color:var(--success);">🤝</div>
+        <div>
+            <h2>Project Glasswing — ความร่วมมือระดับโลก</h2>
+            <p>$100M+ เพื่อเสริมแกร่ง Critical Infrastructure</p>
+        </div>
+    </div>
+
+    <div class="card fade-in">
+        <p style="margin-bottom:1rem; color:var(--text-dim); font-size:0.95rem;">
+            Glasswing เป็นแนวทาง <strong style="color:var(--text);">"Controlled Deployment"</strong> — ไม่ปล่อยให้ Mythos ออกสู่สาธารณะทันที แต่ให้เฉพาะพาร์ทเนอร์ด้าน Critical Infrastructure เข้าถึงก่อน เพื่อค้นหาและแก้ไขช่องโหว่ก่อนที่ผู้ไม่หวังดีจะนำไปใช้
+        </p>
+
+        <h4 style="margin-bottom:0.75rem;">พาร์ทเนอร์หลัก:</h4>
+        <div class="partner-strip">
+            <span class="partner-chip">☁️ AWS</span>
+            <span class="partner-chip">🍎 Apple</span>
+            <span class="partner-chip">🔍 Google</span>
+            <span class="partner-chip">🪟 Microsoft</span>
+            <span class="partner-chip">🟢 NVIDIA</span>
+            <span class="partner-chip">🔒 CrowdStrike</span>
+            <span class="partner-chip">🌐 Cisco</span>
+            <span class="partner-chip">📡 Broadcom</span>
+            <span class="partner-chip">🏦 JPMorganChase</span>
+            <span class="partner-chip">🐧 Linux Foundation</span>
+            <span class="partner-chip">🔥 Palo Alto Networks</span>
+            <span class="partner-chip">➕ 40+ องค์กรเพิ่มเติม</span>
+        </div>
+
+        <h4 style="margin:1.25rem 0 0.75rem;">การลงทุนด้าน Security:</h4>
+        <div class="stat-grid" style="margin-bottom:0;">
+            <div class="stat-card">
+                <div class="stat-number" style="color:var(--success); font-size:1.6rem;">$100M</div>
+                <div class="stat-label">Model Usage Credits สำหรับพาร์ทเนอร์</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" style="color:var(--accent2); font-size:1.6rem;">$2.5M</div>
+                <div class="stat-label">สนับสนุน Alpha-Omega & OpenSSF</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" style="color:var(--warning); font-size:1.6rem;">$1.5M</div>
+                <div class="stat-label">สนับสนุน Apache Software Foundation</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TIMELINE ==================== -->
+    <div class="section-title fade-in">
+        <div class="section-icon" style="background:rgba(129,140,248,0.15); color:var(--accent2);">⏱️</div>
+        <div>
+            <h2>Timeline ของการเปลี่ยนแปลง</h2>
+            <p>จาก "Watershed Moment" สู่ "New Normal"</p>
+        </div>
+    </div>
+
+    <div class="card fade-in">
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--accent);">📢</div>
+                <h4>7 เมษายน 2026 — ประกาศ Mythos Preview</h4>
+                <p>Anthropic เปิดตัว Claude Mythos Preview พร้อมรายงานผลการค้นพบช่องโหว่ในระบบสำคัญทั่วโลก</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--warning);">🔒</div>
+                <h4>ปัจจุบัน — Controlled Access ผ่าน Glasswing</h4>
+                <p>เปิดให้เฉพาะพาร์ทเนอร์ Critical Infrastructure เข้าถึง Mythos ก่อน เพื่อค้นหาและ patch ช่องโหว่ในระบบของตัวเอง</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--danger);">⚡</div>
+                <h4>ช่วงเปลี่ยนผ่าน — "Tumultuous Period"</h4>
+                <p>Anthropic เตือนว่าช่วงเปลี่ยนผ่านนี้จะ "เต็มไปด้วยความปั่นป่วน" เพราะ AI ลดอุปสรรคการโจมตีลงเร็วกว่าที่ฝั่งป้องกันจะตามทัน</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--success);">🎯</div>
+                <h4>อนาคต — Defense Dominance</h4>
+                <p>ในระยะยาว ฝั่งป้องกันจะได้เปรียบมากขึ้น แต่ต้องปรับเปลี่ยนแนวคิด Security แบบ "Ground-up reimagining" ทั้งหมด</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== CITO TAKEAWAY ==================== -->
+    <div class="takeaway fade-in">
+        <h3>🎯 สรุปสำหรับผู้บริหาร — สิ่งที่ต้องทำตอนนี้</h3>
+        <div class="takeaway-items">
+            <div class="takeaway-item">
+                <span class="num">1</span>
+                <p><strong>ทบทวน Legacy Systems ทันที</strong> — ระบบเก่าที่เคยคิดว่า "เสถียร" อาจมีช่องโหว่ที่ซ่อนอยู่หลายสิบปี AI สามารถค้นเจอได้ในข้ามคืน ควรจัดลำดับความสำคัญในการ migrate หรือ harden</p>
+            </div>
+            <div class="takeaway-item">
+                <span class="num">2</span>
+                <p><strong>เร่งรัด Patch Management</strong> — เปลี่ยนจาก "Routine" เป็น "Urgent" เพราะ window of exposure สั้นลงมากเมื่อ AI ค้นพบช่องโหว่ได้เร็วขึ้น</p>
+            </div>
+            <div class="takeaway-item">
+                <span class="num">3</span>
+                <p><strong>ใช้ AI เป็นเครื่องมือป้องกัน</strong> — เริ่มใช้ Frontier Model สแกนหาช่องโหว่ในระบบของตัวเองก่อนที่ผู้โจมตีจะทำ ถือเป็น "ใช้ดาบข้างเดียวกัน"</p>
+            </div>
+            <div class="takeaway-item">
+                <span class="num">4</span>
+                <p><strong>ลงทุนด้าน Security Talent</strong> — เตรียมทีมให้พร้อมรับมือ Incident ระดับ Critical ที่อาจเกิดบ่อยขึ้น และฝึกทีมให้ใช้ AI-assisted security tools</p>
+            </div>
+            <div class="takeaway-item">
+                <span class="num">5</span>
+                <p><strong>ทบทวน Defense-in-Depth Strategy</strong> — อย่าพึ่งพาการป้องกันแบบ "ยากต่อการโจมตี" เพียงอย่างเดียว ต้องมีหลายชั้น และ automate incident response ด้วย AI</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="callout info fade-in" style="margin-bottom:3rem;">
+        <strong>💬 คำกล่าวจาก Anthropic:</strong> "AI จะเปลี่ยนโลก Cybersecurity อย่างรุนแรงเทียบเท่ากับที่อินเทอร์เน็ตเปลี่ยนเมื่อ 20 กว่าปีที่แล้ว — ต้องคิดใหม่ตั้งแต่พื้นฐาน"
+    </div>
+
+</div>
+
+<footer>
+    <p>สรุปเนื้อหาจาก <strong>red.anthropic.com/2026/mythos-preview</strong> & <strong>anthropic.com/glasswing</strong></p>
+    <p style="margin-top:0.5rem;">จัดทำเมื่อ 12 เมษายน 2026 — เน้นมุมมอง Security สำหรับผู้บริหารด้านเทคโนโลยี</p>
+</footer>
+
+<script>
+// Intersection Observer for fade-in animations
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Animate meter bars on scroll
+const meterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.meter-bar').forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => { bar.style.width = width; }, 100);
+            });
+        }
+    });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.risk-meter').forEach(el => meterObserver.observe(el));
+</script>
+
+</body>
+</html>
